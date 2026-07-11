@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resume — Aboubacar Sakho</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  .exp-item{border-left:2px solid var(--border); padding-left:20px; margin-bottom:28px; position:relative;}
+  .exp-item::before{content:""; position:absolute; left:-5px; top:4px; width:8px; height:8px; border-radius:50%; background:var(--red); box-shadow:0 0 8px var(--red);}
+  .exp-item h3{font-size:16px; margin-bottom:2px;}
+  .exp-item .org{color:var(--muted); font-size:13px; margin-bottom:2px;}
+  .exp-item .dates{color:var(--muted-2); font-size:11px; letter-spacing:1px; text-transform:uppercase; margin-bottom:10px;}
+  .exp-item ul{margin:0; padding:0;}
+  .exp-item li{color:var(--muted); font-size:13px; margin-bottom:6px; padding-left:16px; position:relative;}
+  .exp-item li::before{content:"›"; position:absolute; left:0; color:var(--red);}
+  .skill-row{display:flex; gap:10px; margin-bottom:10px; flex-wrap:wrap; align-items:baseline;}
+  .skill-row .k{color:var(--text); font-weight:700; font-size:12px; letter-spacing:0.5px; min-width:190px;}
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <a href="index.html" class="brand">SAKHO<span class="underscore cur">_</span>SEC</a>
+    <div class="navlinks">
+      <a href="whoami.html" class="linkbox">WHOAMI</a>
+      <a href="case-files.html" class="linkbox">CASE FILES</a>
+      <a href="projects.html" class="linkbox">PROJECTS</a>
+      <a href="ops.html" class="linkbox">OPS</a>
+      <a href="contact.html" class="linkbox">CONTACT</a>
+    </div>
+  </nav>
+</header>
+
+<section style="padding-bottom:20px;">
+  <div class="wrap">
+    <div class="eyebrow"><span class="dot"></span> RESUME</div>
+    <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:16px;">
+      <div>
+        <h1 class="title" style="font-size:40px;">Aboubacar Sakho<span class="cur">_</span></h1>
+        <p class="sub" style="margin-bottom:8px;">SOC Analyst | Security Operations &amp; Incident Response</p>
+        <p style="color:var(--muted-2); font-size:12.5px;">Houston, TX · 346-917-7951 · aboubacar.sakho@email.com</p>
+      </div>
+      <a href="Aboubacar_Sakho_Resume.pdf" class="cta" download>[ DOWNLOAD_PDF ]</a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SUMMARY ================= -->
+<section style="padding-top:0;">
+  <div class="wrap">
+    <div class="journey">
+      <p>SOC Analyst with hands-on experience in incident response, threat hunting, and detection engineering
+      gained through a six-month Cyber Range internship. Investigated <span class="hl">100+ security incidents</span>
+      using Microsoft Sentinel, Defender XDR/EDR, Sysmon, Windows Event Logs, Zeek, and Wireshark. Authored
+      <span class="hl">1,000+ KQL/SPL detection queries and Sigma rules</span> mapped to MITRE ATT&amp;CK. Skilled
+      in log analysis, network security monitoring (NSM), vulnerability management, and the
+      <span class="hl2">NIST 800-61</span> incident response lifecycle. Proficient in Windows, Linux, PowerShell,
+      Python, and Bash.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SKILLS ================= -->
+<section style="padding-top:0;">
+  <div class="wrap">
+    <div class="eyebrow"><span class="dot"></span> TECHNICAL SKILLS</div>
+    <div class="card" style="border-left-color:var(--border);">
+      <div class="skill-row"><span class="k">SIEM &amp; SOC OPS</span><span style="color:var(--muted); font-size:13px;">Microsoft Sentinel, Splunk Enterprise, KQL, SPL, Sigma Rules, Detection Engineering, SOAR, Threat Intelligence</span></div>
+      <div class="skill-row"><span class="k">ENDPOINT &amp; NETWORK</span><span style="color:var(--muted); font-size:13px;">Microsoft Defender for Endpoint (EDR/XDR), Sysmon, Windows Event Logs, Wireshark, Zeek, NSM, IDS/IPS, Malware Analysis</span></div>
+      <div class="skill-row"><span class="k">FRAMEWORKS &amp; RISK</span><span style="color:var(--muted); font-size:13px;">MITRE ATT&amp;CK, Cyber Kill Chain, NIST 800-61, Incident Response, Vulnerability Management, Active Directory</span></div>
+      <div class="skill-row"><span class="k">SCRIPTING &amp; SYSTEMS</span><span style="color:var(--muted); font-size:13px;">PowerShell, Python, Bash, Windows Server, Linux, Azure</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= EXPERIENCE ================= -->
+<section style="padding-top:0;">
+  <div class="wrap">
+    <div class="eyebrow"><span class="dot"></span> PROFESSIONAL EXPERIENCE</div>
+
+    <div class="exp-item">
+      <h3>SOC Analyst Intern / Cyber Range Engineer</h3>
+      <div class="org">LogNPacific Cyber Range</div>
+      <div class="dates">Dec 2025 – Jun 2026</div>
+      <ul>
+        <li>Investigated 100+ security incidents involving malware, credential abuse, persistence, lateral movement, and C2 activity across a simulated enterprise network.</li>
+        <li>Conducted proactive threat hunting using KQL and SPL to identify malicious activity beyond alert-based detection.</li>
+        <li>Built Microsoft Sentinel analytics rules and Sigma detections mapped to MITRE ATT&amp;CK, improving detection coverage.</li>
+        <li>Led incident response for botnet infections across seven virtual machines, tracing C2 callbacks and cryptomining activity to weak Linux credentials; remediated and hardened affected hosts.</li>
+        <li>Completed 200+ hours of Cyber Range exercises and built 5+ SOC monitoring dashboards for real-time visibility.</li>
+      </ul>
+    </div>
+
+    <div class="exp-item">
+      <h3>IT Systems Administrator / Owner</h3>
+      <div class="org">Sakho Computer &amp; Cellphones, Houston, TX</div>
+      <div class="dates">2018 – 2024</div>
+      <ul>
+        <li>Diagnosed and repaired Windows, macOS, and mobile devices; performed malware remediation and OS deployments for hundreds of clients.</li>
+        <li>Supported small-business network security, infrastructure troubleshooting, and endpoint hardening.</li>
+      </ul>
+    </div>
+
+    <div class="exp-item">
+      <h3>Independent Network Engineering Study</h3>
+      <div class="org">Houston, TX</div>
+      <div class="dates">2003 – 2018</div>
+      <ul>
+        <li>Completed extensive hands-on Cisco IOS routing and switching labs in GNS3 while working toward CCIE-level network engineering expertise.</li>
+      </ul>
+    </div>
+
+    <div class="exp-item">
+      <h3>Computer Laboratory Manager</h3>
+      <div class="org">International Network &amp; Business Center, Guinea</div>
+      <div class="dates">2001 – 2003</div>
+      <ul>
+        <li>Designed, deployed, and managed a 50-workstation educational computer lab and cyber cafe, overseeing network setup and system administration.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ================= EDUCATION ================= -->
+<section style="padding-top:0;">
+  <div class="wrap">
+    <div class="eyebrow"><span class="dot"></span> EDUCATION &amp; CERTIFICATIONS</div>
+    <div class="grid cols-2">
+      <div class="card"><h3>M.S., Cybersecurity</h3><p class="desc">University of Houston–Downtown, 2020</p></div>
+      <div class="card"><h3>Graduate Certificate, Cybersecurity</h3><p class="desc">University of Houston–Downtown, 2019</p></div>
+      <div class="card"><h3>B.S., Economics &amp; Management</h3><p class="desc">International Islamic University Malaysia</p></div>
+      <div class="card"><h3>Certifications</h3><p class="desc">Google Cybersecurity Professional Certificate · Microsoft Azure Fundamentals (AZ-900) · CISSP (In Progress)</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ACHIEVEMENTS ================= -->
+<section style="padding-top:0;">
+  <div class="wrap">
+    <div class="stats" style="border-bottom:none;">
+      <div class="stat"><b>100+</b><span>Security Investigations</span></div>
+      <div class="stat"><b>200+</b><span>Cyber Range Hours</span></div>
+      <div class="stat"><b>4</b><span>AI Security Agents Built</span></div>
+      <div class="stat"><b>5+</b><span>SOC Dashboards</span></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="foot-brand">SAKHO_SEC</div>
+        <div class="foot-tagline">FIND<span class="r">EVIL</span>.BUILD<span class="r">SYSTEMS</span>.<span class="cur">_</span></div>
+        <div class="foot-sub">Offense. Defense. Code.</div>
+      </div>
+      <div class="foot-social">
+        <a href="https://github.com/mrabousakho" title="GitHub" target="_blank" rel="noopener">⌥</a>
+        <a href="https://www.linkedin.com/in/asakho/" title="LinkedIn" target="_blank" rel="noopener">in</a>
+        <a href="mailto:aboubacar.sakho@email.com" title="Email">✉</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/script.js"></script>
+</body>
+</html>

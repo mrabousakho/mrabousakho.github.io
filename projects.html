@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Projects — Aboubacar Sakho</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<header>
+  <nav>
+    <a href="index.html" class="brand">SAKHO<span class="underscore cur">_</span>SEC</a>
+    <div class="navlinks">
+      <a href="whoami.html" class="linkbox">WHOAMI</a>
+      <a href="case-files.html" class="linkbox">CASE FILES</a>
+      <a href="projects.html" class="linkbox">PROJECTS</a>
+      <a href="ops.html" class="linkbox">OPS</a>
+      <a href="contact.html" class="linkbox">CONTACT</a>
+    </div>
+  </nav>
+</header>
+
+<section style="padding-bottom:40px;">
+  <div class="wrap">
+    <div class="eyebrow" style="color:var(--purple);"><span class="dot" style="background:var(--purple); box-shadow:0 0 8px var(--purple);"></span> LAB BUILDS &amp; PRODUCTS</div>
+    <h1 class="title" style="font-size:44px;">Things I've Shipped<span class="cur">_</span></h1>
+    <p class="sub" style="max-width:640px;">
+      Production apps, an autonomous SOC agent, and the automation tooling connecting them —
+      built solo or with a co-founder, end to end.
+    </p>
+  </div>
+</section>
+
+<!-- ================= APPS & PRODUCTS ================= -->
+<section style="padding-top:0;">
+  <div class="wrap">
+    <div class="eyebrow"><span class="dot" style="background:var(--green); box-shadow:0 0 8px var(--green);"></span> PRODUCTS</div>
+    <h2 class="head">Apps in the Field<span class="cur">_</span></h2>
+    <p class="sub">Live or in testing — real users, real infrastructure.</p>
+
+    <div class="grid cols-2">
+      <div class="card">
+        <div class="top-row"><h3>Nabayatrade</h3><span class="badge live">LIVE</span></div>
+        <div class="meta">Co-founded with Mohamed Sanoh · nabayatrade.com</div>
+        <p class="desc">Verified B2B sourcing marketplace targeting African and French-speaking markets. Every listing goes through mandatory verification, and payments run on an escrow model so neither side is exposed.</p>
+        <div class="tags"><span class="tag">Next.js</span><span class="tag">Supabase</span><span class="tag">Escrow</span><span class="tag">i18n</span></div>
+      </div>
+
+      <div class="card">
+        <div class="top-row"><h3>Obsidian Habit</h3><span class="badge active">BETA</span></div>
+        <div class="meta">Obsidian_Labs · Android, Play Store internal testing</div>
+        <p class="desc">Habit tracker with a Sunday Intelligence Report, streak calendar, and Supabase cloud sync. Built on React Native + Expo SDK 54 with a Claude-powered coaching edge function.</p>
+        <div class="tags"><span class="tag">React Native</span><span class="tag">Expo</span><span class="tag">Supabase</span></div>
+      </div>
+
+      <div class="card">
+        <div class="top-row"><h3>Obsidian Journal</h3><span class="badge tool">IN DEV</span></div>
+        <div class="meta">Obsidian_Labs · "The journal that reads you back"</div>
+        <p class="desc">AI-assisted journaling app with a Psychological Pattern Engine that unlocks after three entries, an Emotional DNA Score, and a rolling seven-day mood chart.</p>
+        <div class="tags"><span class="tag">Claude API</span><span class="tag">React Native</span><span class="tag">Supabase</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SOC AGENTS & AI ================= -->
+<section style="padding-top:0;">
+  <div class="eyebrow"><span class="dot" style="background:var(--blue); box-shadow:0 0 8px var(--blue);"></span></div>
+  <div class="wrap">
+    <div class="eyebrow" style="color:var(--blue);"><span class="dot" style="background:var(--blue); box-shadow:0 0 8px var(--blue);"></span> SOC AGENTS &amp; AI SECURITY</div>
+    <h2 class="head">Automation That Actually Catches Things<span class="cur">_</span></h2>
+    <p class="sub">The SOC agent pipeline is the centerpiece — it's the one that found a real compromise on its own.</p>
+
+    <div class="terminal type-panel" style="margin-bottom:24px;">
+      <div class="term-bar">
+        <div class="dots"><span></span><span></span><span></span></div>
+        soc_agents.py
+      </div>
+      <div class="term-body">
+        <div class="line"><span class="prompt">&gt;</span> <span class="type-target">agents --status --all</span></div>
+      </div>
+      <div class="term-footer">
+        <span>4 autonomous agents · running 24/7</span>
+        <span class="tag">Minimal human intervention</span>
+      </div>
+    </div>
+
+    <div class="grid cols-2">
+      <div class="card">
+        <div class="top-row"><h3>AI Threat Intelligence Agent</h3><span class="badge tool">AGENT 1</span></div>
+        <div class="meta">Runs every 15 minutes</div>
+        <p class="desc">Continuously pulls from trusted cybersecurity sources, prioritizes emerging threats, and generates executive summaries — including a flag on critical vulnerabilities that need attention now.</p>
+        <div class="tags"><span class="tag">Threat Intel</span><span class="tag">Automation</span></div>
+      </div>
+
+      <div class="card">
+        <div class="top-row"><h3>AI Security News Aggregator</h3><span class="badge tool">AGENT 2</span></div>
+        <div class="meta">Daily analyst-ready reports</div>
+        <p class="desc">Reviews cybersecurity news across multiple sources every day and prepares a report covering emerging threats, IOCs, MITRE ATT&amp;CK techniques, suggested Sentinel KQL queries, and remediation guidance — so the day starts with intelligence, not research.</p>
+        <div class="tags"><span class="tag">MITRE ATT&amp;CK</span><span class="tag">KQL</span></div>
+      </div>
+
+      <div class="card">
+        <div class="top-row"><h3>AI Network Traffic Monitoring Agent</h3><span class="badge tool">AGENT 3</span></div>
+        <div class="meta">Continuous behavioral analysis</div>
+        <p class="desc">Watches enterprise network activity, profiles behavioral patterns, and flags suspicious traffic for early detection of malicious activity.</p>
+        <div class="tags"><span class="tag">NSM</span><span class="tag">Behavioral Analysis</span></div>
+      </div>
+
+      <div class="card">
+        <div class="top-row"><h3>AI Vulnerability Assessment Agent</h3><span class="badge tool">AGENT 4</span></div>
+        <div class="meta">Automated severity prioritization</div>
+        <p class="desc">Runs automated vulnerability checks, ranks findings by severity, and helps identify systems that need remediation first.</p>
+        <div class="tags"><span class="tag">Vuln Management</span><span class="tag">Prioritization</span></div>
+      </div>
+    </div>
+
+    <div class="grid cols-2" style="margin-top:20px;">
+      <div class="card">
+        <div class="top-row"><h3>5+ SOC Monitoring Dashboards</h3><span class="badge active">INFRA</span></div>
+        <p class="desc">Real-time visibility into security events, vulnerabilities, and threat intelligence — built to help teams triage by operational priority, part of standing up the Cyber Range's next-gen SOC.</p>
+        <div class="tags"><span class="tag">Dashboards</span><span class="tag">SOC Architecture</span></div>
+      </div>
+      <div class="card">
+        <div class="top-row"><h3>Vulnerability Management Program</h3><span class="badge active">PROJECT</span></div>
+        <div class="meta"><a href="https://github.com/mrabousakho/Vulnerability-Management-Project" target="_blank" rel="noopener">github.com/mrabousakho/Vulnerability-Management-Project</a></div>
+        <p class="desc">End-to-end vulnerability management lifecycle — risk prioritization and remediation strategy from start to finish.</p>
+        <div class="tags"><span class="tag">Risk Prioritization</span><span class="tag">Remediation</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="foot-brand">SAKHO_SEC</div>
+        <div class="foot-tagline">FIND<span class="r">EVIL</span>.BUILD<span class="r">SYSTEMS</span>.<span class="cur">_</span></div>
+        <div class="foot-sub">Offense. Defense. Code.</div>
+      </div>
+      <div class="foot-social">
+        <a href="https://github.com/mrabousakho" title="GitHub">⌥</a>
+        <a href="https://www.linkedin.com/in/asakho/" title="LinkedIn">in</a>
+        <a href="mailto:aboubacar.sakho@email.com" title="Email">✉</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/script.js"></script>
+</body>
+</html>
