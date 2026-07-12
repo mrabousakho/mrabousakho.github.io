@@ -27,16 +27,31 @@ function initTypewriters(){
     step();
   }
 
-  const io = new IntersectionObserver((entries)=>{
-    entries.forEach(entry=>{
-      if (entry.isIntersecting){
-        typeInto(entry.target);
-        io.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.3 });
+  // Fire immediately for anything already on screen (covers the hero
+  // terminal, which is always above the fold) instead of relying solely
+  // on IntersectionObserver, which was failing to trigger reliably.
+  const already = new Set();
+  targets.forEach((t, idx)=>{
+    const rect = t.getBoundingClientRect();
+    const inView = rect.top < window.innerHeight && rect.bottom > 0;
+    if (inView){
+      already.add(t);
+      setTimeout(()=> typeInto(t), idx * 120);
+    }
+  });
 
-  targets.forEach(t => io.observe(t));
+  const remaining = Array.from(targets).filter(t => !already.has(t));
+  if (remaining.length){
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(entry=>{
+        if (entry.isIntersecting){
+          typeInto(entry.target);
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0, rootMargin: '0px 0px -10% 0px' });
+    remaining.forEach(t => io.observe(t));
+  }
 }
 
 // ===== Highlight current page in nav =====
