@@ -37,7 +37,7 @@
 
     <div class="stats">
       <div class="stat"><b>100+</b><span>Investigations Total</span></div>
-      <div class="stat"><b>10</b><span>Full Write-Ups Below</span></div>
+      <div class="stat"><b>13</b><span>Full Write-Ups Below</span></div>
       <div class="stat"><b>18/18</b><span>Northpeak Descent Flags</span></div>
       <div class="stat"><b>1,000+</b><span>KQL/SPL Queries Authored</span></div>
     </div>
@@ -75,14 +75,27 @@
         <div class="meta">Hunts 05 &amp; 06 · Azure VM (azwks-phtg-02)</div>
         <p class="desc">RDP compromise traced back to a LinkedIn OPSEC failure, followed by lateral movement to a second VM, service-masquerading persistence, dual C2 to a lookalike domain, and LSASS credential dumping.</p>
         <div class="tags"><span class="tag">RDP</span><span class="tag">LSASS</span><span class="tag">Persistence</span></div>
+        <div style="display:flex; gap:10px; margin-top:14px;">
+          <a href="https://github.com/mrabousakho/SIGNALS_BEFORE_THE_NOISE" target="_blank" rel="noopener" class="linkbox" style="padding:7px 12px; font-size:10.5px;">PART I ↗</a>
+          <a href="https://github.com/mrabousakho/-SIGNALS-BEFORE-THE-NOISE-II" target="_blank" rel="noopener" class="linkbox" style="padding:7px 12px; font-size:10.5px;">PART II ↗</a>
+        </div>
       </div>
 
-      <div class="card">
+      <a href="https://github.com/mrabousakho/HUNT-09-LATERAL-DESCENT" target="_blank" rel="noopener" class="card">
+        <div class="top-row"><h3>Hunt 09: Lateral Descent</h3><span class="badge high">HIGH</span></div>
+        <div class="meta">HUNT-09-LATERAL-DESCENT</div>
+        <p class="desc">Tracking an attacker's movement across hosts after initial foothold — full lateral movement chain reconstructed from telemetry.</p>
+        <div class="tags"><span class="tag">Lateral Movement</span><span class="tag">SIEM</span></div>
+        <div class="view-repo">View repo on GitHub →</div>
+      </a>
+
+      <a href="https://github.com/mrabousakho/ai-threat-hunting" target="_blank" rel="noopener" class="card">
         <div class="top-row"><h3>XorDDoS / .diicot Compromise</h3><span class="badge critical">REAL INCIDENT</span></div>
         <div class="meta">INC-367047 · dugglescript-linux · Discovered autonomously</div>
         <p class="desc">Not a lab exercise. My own SOC agent pipeline surfaced this cryptominer compromise on a live host while running unattended — full writeup covers what the agent saw and how it decided to escalate.</p>
         <div class="tags"><span class="tag">Cryptominer</span><span class="tag">Autonomous Detection</span></div>
-      </div>
+        <div class="view-repo">View repo on GitHub →</div>
+      </a>
 
       <div class="card">
         <div class="top-row"><h3>Fake IT Support Social Engineering</h3><span class="badge high">TRAINING</span></div>
@@ -90,6 +103,14 @@
         <p class="desc">Reconstructed an RDP-based intrusion on an intern workstation, then built out the attacker-profiler query methodology that carried into every hunt after it.</p>
         <div class="tags"><span class="tag">Social Engineering</span><span class="tag">RDP</span></div>
       </div>
+
+      <a href="https://github.com/mrabousakho/hunts-silent-corridor-" target="_blank" rel="noopener" class="card">
+        <div class="top-row"><h3>Silent Corridor</h3><span class="badge perfect">33/37</span></div>
+        <div class="meta">Cyber Range Threat Hunt Competition</div>
+        <p class="desc">Competitive threat hunt scoring 33 of 37 flags — full report on the attacker chain and where the remaining flags led.</p>
+        <div class="tags"><span class="tag">Threat Hunt</span><span class="tag">Competition</span></div>
+        <div class="view-repo">View repo on GitHub →</div>
+      </a>
 
     </div>
   </div>
@@ -100,36 +121,48 @@
   <div class="wrap">
     <div class="eyebrow" style="color:var(--blue);"><span class="dot" style="background:var(--blue); box-shadow:0 0 8px var(--blue);"></span> FROM THE REPOSITORY</div>
     <h2 class="head">Full Write-Ups on GitHub<span class="cur">_</span></h2>
-    <p class="sub">The complete investigations, with evidence and queries — linked straight to the repo.</p>
+    <p class="sub">The complete investigations, with evidence and queries — click any card to open the repo.</p>
 
     <div class="grid cols-2">
-      <div class="card">
+      <a href="https://github.com/mrabousakho/EMBERFORGE" target="_blank" rel="noopener" class="card">
         <div class="top-row"><h3>EMBERFORGE</h3><span class="badge critical">FULL KILL CHAIN</span></div>
-        <div class="meta"><a href="https://github.com/mrabousakho/EMBERFORGE" target="_blank" rel="noopener">github.com/mrabousakho/EMBERFORGE</a></div>
+        <div class="meta">github.com/mrabousakho/EMBERFORGE</div>
         <p class="desc">Active Directory attack investigation reconstructing source-code exfiltration end to end: initial access → persistence → data staging → exfiltration.</p>
         <div class="tags"><span class="tag">Active Directory</span><span class="tag">Exfiltration</span></div>
-      </div>
+        <div class="view-repo">View repo on GitHub →</div>
+      </a>
 
-      <div class="card">
+      <a href="https://github.com/mrabousakho/Pacific-Financial-BEC" target="_blank" rel="noopener" class="card">
         <div class="top-row"><h3>Pacific Financial BEC</h3><span class="badge high">EMAIL</span></div>
-        <div class="meta"><a href="https://github.com/mrabousakho/Pacific-Financial-BEC" target="_blank" rel="noopener">github.com/mrabousakho/Pacific-Financial-BEC</a></div>
+        <div class="meta">github.com/mrabousakho/Pacific-Financial-BEC</div>
         <p class="desc">Business email compromise investigation for Pacific Financial Services — attacker behavior, detection strategy, and full timeline.</p>
         <div class="tags"><span class="tag">BEC</span><span class="tag">Email Security</span></div>
-      </div>
+        <div class="view-repo">View repo on GitHub →</div>
+      </a>
 
-      <div class="card">
+      <a href="https://github.com/mrabousakho/Cloud_VM_Breach" target="_blank" rel="noopener" class="card">
         <div class="top-row"><h3>Cloud VM Breach</h3><span class="badge high">CLOUD</span></div>
-        <div class="meta"><a href="https://github.com/mrabousakho/Cloud_VM_Breach" target="_blank" rel="noopener">github.com/mrabousakho/Cloud_VM_Breach</a></div>
+        <div class="meta">github.com/mrabousakho/Cloud_VM_Breach</div>
         <p class="desc">Analysis of unauthorized access, persistence, and lateral movement inside a compromised cloud VM.</p>
         <div class="tags"><span class="tag">Cloud</span><span class="tag">Lateral Movement</span></div>
-      </div>
+        <div class="view-repo">View repo on GitHub →</div>
+      </a>
 
-      <div class="card">
+      <a href="https://github.com/mrabousakho/Threat-Hunting-Scenario-Tor-Browser-Usage..-" target="_blank" rel="noopener" class="card">
         <div class="top-row"><h3>Tor Browser Usage Detection</h3><span class="badge active">ENDPOINT</span></div>
-        <div class="meta"><a href="https://github.com/mrabousakho/Threat-Hunting-Scenario-Tor-Browser-Usage..-" target="_blank" rel="noopener">github.com/mrabousakho/Threat-Hunting-Scenario-Tor-Browser-Usage</a></div>
+        <div class="meta">github.com/mrabousakho/Threat-Hunting-Scenario-Tor-Browser-Usage..-</div>
         <p class="desc">Identifying anonymization tool usage through endpoint and network telemetry.</p>
         <div class="tags"><span class="tag">Anonymization</span><span class="tag">Endpoint Telemetry</span></div>
-      </div>
+        <div class="view-repo">View repo on GitHub →</div>
+      </a>
+
+      <a href="https://github.com/mrabousakho/Vulnerability-Management-Project" target="_blank" rel="noopener" class="card">
+        <div class="top-row"><h3>Vulnerability Management Project</h3><span class="badge active">PROJECT</span></div>
+        <div class="meta">github.com/mrabousakho/Vulnerability-Management-Project</div>
+        <p class="desc">End-to-end vulnerability management lifecycle — risk prioritization and remediation strategy from start to finish.</p>
+        <div class="tags"><span class="tag">Risk Prioritization</span><span class="tag">Remediation</span></div>
+        <div class="view-repo">View repo on GitHub →</div>
+      </a>
     </div>
   </div>
 </section>
