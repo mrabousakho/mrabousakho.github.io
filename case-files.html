@@ -47,7 +47,14 @@
 <!-- ================= HUNT REPORTS ================= -->
 <section style="padding-top:0;">
   <div class="wrap">
-    <div class="grid cols-2">
+    <div class="filter-row" id="filter-row">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="critical">Critical</button>
+      <button class="filter-btn" data-filter="high">High</button>
+      <button class="filter-btn" data-filter="active">In Progress</button>
+      <button class="filter-btn" data-filter="perfect">Perfect Score</button>
+    </div>
+    <div class="grid cols-2" id="case-grid">
 
       <div class="card">
         <div class="top-row"><h3>Northpeak Descent</h3><span class="badge perfect">18/18</span></div>
@@ -123,7 +130,7 @@
     <h2 class="head">Full Write-Ups on GitHub<span class="cur">_</span></h2>
     <p class="sub">The complete investigations, with evidence and queries — click any card to open the repo.</p>
 
-    <div class="grid cols-2">
+    <div class="grid cols-2" id="repo-grid">
       <a href="https://github.com/mrabousakho/EMBERFORGE" target="_blank" rel="noopener" class="card">
         <div class="top-row"><h3>EMBERFORGE</h3><span class="badge critical">FULL KILL CHAIN</span></div>
         <div class="meta">github.com/mrabousakho/EMBERFORGE</div>
