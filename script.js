@@ -70,7 +70,34 @@ document.addEventListener('DOMContentLoaded', ()=>{
   initMatrixBackground();
   initGithubStats();
   initCaseFilters();
+  initCopyButtons();
+  initScrollReveal();
+  initKonamiCode();
 });
+
+// ===== Copy-to-clipboard buttons on query code blocks =====
+function initCopyButtons(){
+  const blocks = document.querySelectorAll('.query-card pre');
+  blocks.forEach(pre => {
+    const originalText = pre.textContent;
+    pre.style.position = 'relative';
+    const btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.type = 'button';
+    btn.textContent = 'COPY';
+    btn.addEventListener('click', ()=>{
+      navigator.clipboard.writeText(originalText.trim()).then(()=>{
+        btn.textContent = 'COPIED';
+        btn.classList.add('copied');
+        setTimeout(()=>{ btn.textContent = 'COPY'; btn.classList.remove('copied'); }, 1500);
+      }).catch(()=>{
+        btn.textContent = 'FAILED';
+        setTimeout(()=>{ btn.textContent = 'COPY'; }, 1500);
+      });
+    });
+    pre.appendChild(btn);
+  });
+}
 
 // ===== Subtle matrix-style hero background (Home page only) =====
 function initMatrixBackground(){
@@ -130,7 +157,61 @@ function initGithubStats(){
     });
 }
 
-// ===== Case Files filter buttons =====
+// ===== Scroll-reveal animations =====
+function initScrollReveal(){
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const targets = document.querySelectorAll('.card, .work-card, .tool-card, .contact-card, .query-card');
+  if (!targets.length) return;
+
+  if (reduceMotion){
+    targets.forEach(t => t.classList.add('revealed'));
+    return;
+  }
+
+  targets.forEach(t => t.classList.add('reveal-init'));
+
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if (entry.isIntersecting){
+        entry.target.classList.add('revealed');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+
+  targets.forEach(t => io.observe(t));
+}
+
+// ===== Konami code easter egg =====
+function initKonamiCode(){
+  const sequence = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+  let pos = 0;
+
+  document.addEventListener('keydown', (e)=>{
+    const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+    if (key === sequence[pos]){
+      pos++;
+      if (pos === sequence.length){
+        pos = 0;
+        triggerEasterEgg();
+      }
+    } else {
+      pos = (key === sequence[0]) ? 1 : 0;
+    }
+  });
+
+  function triggerEasterEgg(){
+    const overlay = document.createElement('div');
+    overlay.className = 'egg-overlay';
+    overlay.innerHTML = `<div class="egg-text">ACCESS GRANTED<span class="cur">_</span><div class="egg-sub">root privileges confirmed // sakho_sec</div></div>`;
+    document.body.appendChild(overlay);
+    requestAnimationFrame(()=> overlay.classList.add('show'));
+    setTimeout(()=>{
+      overlay.classList.remove('show');
+      setTimeout(()=> overlay.remove(), 400);
+    }, 2200);
+  }
+}
 function initCaseFilters(){
   const row = document.getElementById('filter-row');
   if (!row) return;
