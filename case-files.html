@@ -67,13 +67,16 @@
     </div>
     <div class="grid cols-2" id="case-grid">
 
-      <a href="https://github.com/mrabousakho/north-peak-descent" target="_blank" rel="noopener" class="card">
+      <div class="card">
         <div class="top-row"><h3>Northpeak Descent</h3><span class="badge perfect">18/18</span></div>
         <div class="meta">LOG(N) Pacific Cyber Range · Reviewed by Josh Madakor</div>
-        <p class="desc">Full-flag threat hunt scored a perfect 18/18 — one of only four analysts on the range to do so. Full report, evidence chain, and a companion forensic clinic below.</p>
+        <p class="desc">Full-flag threat hunt scored a perfect 18/18 — one of only four analysts on the range to do so. Full report and a companion KQL query clinic, built into the site.</p>
         <div class="tags"><span class="tag">KQL</span><span class="tag">Sentinel</span><span class="tag">MDE</span></div>
-        <div class="view-repo">View repo on GitHub →</div>
-      </a>
+        <div style="display:flex; gap:10px; margin-top:14px;">
+          <a href="northpeak-report.html" class="linkbox" style="padding:7px 12px; font-size:10.5px;">FULL REPORT ↗</a>
+          <a href="northpeak-clinic.html" class="linkbox" style="padding:7px 12px; font-size:10.5px;">KQL CLINIC ↗</a>
+        </div>
+      </div>
 
       <div class="card">
         <div class="top-row"><h3>Hidden Directive</h3><span class="badge active">IN PROGRESS</span></div>
@@ -96,16 +99,16 @@
         <div class="tags"><span class="tag">RDP</span><span class="tag">LSASS</span><span class="tag">Persistence</span></div>
         <div style="display:flex; gap:10px; margin-top:14px;">
           <a href="https://github.com/mrabousakho/SIGNALS_BEFORE_THE_NOISE" target="_blank" rel="noopener" class="linkbox" style="padding:7px 12px; font-size:10.5px;">PART I ↗</a>
-          <a href="https://github.com/mrabousakho/-SIGNALS-BEFORE-THE-NOISE-II" target="_blank" rel="noopener" class="linkbox" style="padding:7px 12px; font-size:10.5px;">PART II ↗</a>
+          <a href="signals-ii-report.html" class="linkbox" style="padding:7px 12px; font-size:10.5px;">PART II · FULL REPORT ↗</a>
         </div>
       </div>
 
-      <a href="https://github.com/mrabousakho/HUNT-09-LATERAL-DESCENT" target="_blank" rel="noopener" class="card">
-        <div class="top-row"><h3>Hunt 09: Lateral Descent</h3><span class="badge high">HIGH</span></div>
-        <div class="meta">HUNT-09-LATERAL-DESCENT</div>
-        <p class="desc">Tracking an attacker's movement across hosts after initial foothold — full lateral movement chain reconstructed from telemetry.</p>
-        <div class="tags"><span class="tag">Lateral Movement</span><span class="tag">SIEM</span></div>
-        <div class="view-repo">View repo on GitHub →</div>
+      <a href="hunt09-report.html" class="card">
+        <div class="top-row"><h3>Hunt 09: Lateral Descent</h3><span class="badge perfect">39/39</span></div>
+        <div class="meta">greenfield.local · Sentinel + Defender XDR</div>
+        <p class="desc">Full-chain Active Directory compromise — Kerberoasting to DCSync to Pass-the-Hash to Domain Admin, ending in ransomware staged for a domain-wide GPO push. Full clear.</p>
+        <div class="tags"><span class="tag">Lateral Movement</span><span class="tag">Active Directory</span></div>
+        <div class="view-repo">Read the full report →</div>
       </a>
 
       <a href="https://github.com/mrabousakho/ai-threat-hunting" target="_blank" rel="noopener" class="card">
@@ -123,12 +126,12 @@
         <div class="tags"><span class="tag">Social Engineering</span><span class="tag">RDP</span></div>
       </div>
 
-      <a href="https://github.com/mrabousakho/hunts-silent-corridor-" target="_blank" rel="noopener" class="card">
-        <div class="top-row"><h3>Silent Corridor</h3><span class="badge perfect">33/37</span></div>
-        <div class="meta">Cyber Range Threat Hunt Competition</div>
-        <p class="desc">Competitive threat hunt scoring 33 of 37 flags — full report on the attacker chain and where the remaining flags led.</p>
-        <div class="tags"><span class="tag">Threat Hunt</span><span class="tag">Competition</span></div>
-        <div class="view-repo">View repo on GitHub →</div>
+      <a href="silent-corridor-report.html" class="card">
+        <div class="top-row"><h3>Silent Corridor</h3><span class="badge perfect">40/41</span></div>
+        <div class="meta">Octo Tempest (Scattered Spider) · Azure Sentinel</div>
+        <p class="desc">A confirmed Octo Tempest intrusion — AI session-file theft, a Sliver C2 implant, and four failed lateral-movement attempts blocked by Defender for Cloud.</p>
+        <div class="tags"><span class="tag">Threat Hunt</span><span class="tag">Octo Tempest</span></div>
+        <div class="view-repo">Read the full report →</div>
       </a>
 
     </div>
