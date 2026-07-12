@@ -1,106 +1,173 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Vulnerability Management Program — Project Report</title>
-<link rel="stylesheet" href="report-theme.css">
-</head><body>
-<div class="site-nav"><a href="projects.html">&larr; Back to Projects</a><span class="brand">SAKHO_SEC &middot; VULNERABILITY MANAGEMENT PROGRAM</span></div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vulnerability Management Program — Aboubacar Sakho</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2308090b'/%3E%3Ctext x='16' y='46' font-family='monospace' font-size='38' font-weight='bold' fill='%23ff4433'%3E%3E%3C/text%3E%3C/svg%3E">
+<meta name="description" content="End-to-end vulnerability management program — policy, stakeholder buy-in, and an 80% vulnerability reduction.">
+<meta property="og:title" content="Vulnerability Management Program — Aboubacar Sakho">
+<meta property="og:description" content="End-to-end vulnerability management program — policy, stakeholder buy-in, and an 80% vulnerability reduction.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mrabousakho.github.io/vuln-mgmt-report.html">
+<meta property="og:image" content="https://mrabousakho.github.io/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-<div class="cover-simple" style="--accent:#35d0a5;--accent2:#3a7bff">
+<header>
+  <nav>
+    <a href="index.html" class="brand">SAKHO<span class="underscore cur">_</span>SEC</a>
+    <div class="navlinks">
+      <a href="whoami.html" class="linkbox">WHOAMI</a>
+      <a href="case-files.html" class="linkbox">CASE FILES</a>
+      <a href="projects.html" class="linkbox">PROJECTS</a>
+      <a href="ops.html" class="linkbox">OPS</a>
+      <a href="contact.html" class="linkbox">CONTACT</a>
+    </div>
+  </nav>
+</header>
+
+<section class="report-hero">
   <div class="wrap">
-    <div class="eyebrow">Program Implementation &middot; Cyber Range</div>
-    <div class="ksig"></div>
-    <h1>Vulnerability<br>Management</h1>
-    <div class="sub">From zero policy to a completed remediation cycle &mdash; the full program, start to finish.</div>
-    <div class="spacer"></div>
-    <div class="meta">
-      <div><span>Lead</span><b>Aboubacar Sakho</b></div>
-      <div><span>Platform</span><b>Tenable</b></div>
-      <div><span>Infra</span><b>Azure VMs (Nessus)</b></div>
-      <div><span>Scope</span><b>Server team assets</b></div>
-      <div><span>Result</span><b class="ok">80% vuln reduction</b></div>
-      <div><span>Classification</span><b>Portfolio &middot; Cyber Range Project</b></div>
+    <div style="text-align:center;">
+      <span class="eyebrow-pill">&#9679; CYBER RANGE PROJECT</span>
+    </div>
+    <h1>VULNERABILITY <span class="accent">MANAGEMENT</span><span class="cur">_</span></h1>
+    <div class="sub">Program Implementation &middot; Policy to Remediation</div>
+    <p class="desc">From an organization with no existing policy or practices, to a formal policy enacted, stakeholder buy-in secured, and a full cycle of vulnerability remediation completed &mdash; using Tenable and Azure-hosted Nessus scan engines.</p>
+    <div class="stats">
+      <div class="stat"><b>80%</b><span>Total Vuln Reduction</span></div>
+      <div class="stat"><b>100%</b><span>Criticals Resolved</span></div>
+      <div class="stat"><b>90%</b><span>Highs Resolved</span></div>
+      <div class="stat"><b>30&rarr;6</b><span>Total Vulnerabilities</span></div>
     </div>
   </div>
-</div>
+</section>
 
-<div class="body doc">
-
-<section>
-  <div class="eyebrow2" data-n="00">Program Overview</div>
-  <h2>Inception to completion</h2>
-  <p class="lead">This project simulates the implementation of a comprehensive vulnerability management program, from an organization with no existing policy or practices in place, to a formal policy enacted, stakeholder buy-in secured, and a full cycle of organization-wide vulnerability remediation successfully completed.</p>
-  <p>Technology used: <strong>Tenable</strong> (enterprise vulnerability management platform), <strong>Azure Virtual Machines</strong> (Nessus scan engine + scan targets), and <strong>PowerShell &amp; Bash</strong> remediation scripts.</p>
-
-  <div class="stats">
-    <div><b class="g">80%</b><span>Total Vuln Reduction</span></div>
-    <div><b class="c">100%</b><span>Criticals Resolved</span></div>
-    <div><b class="a">90%</b><span>Highs Resolved</span></div>
-    <div><b class="r">30&rarr;6</b><span>Total Vulnerabilities</span></div>
+<section style="padding-top:0;">
+  <div class="wrap">
+    <div class="eyebrow"><span class="dot"></span> DEEP_DIVE_RESOURCES</div>
+    <div class="icon-grid">
+      <a href="https://docs.google.com/document/d/1rvueLX_71pOR8ldN9zVW9r_zLzDQxVsnSUtNar8ftdg/edit?usp=drive_link" target="_blank" rel="noopener" class="icon-box">
+        <div class="arrow">&rarr;</div>
+        <div class="ic">&#128196;</div>
+        <h5>Finalized Policy</h5>
+        <span>Signed-off VM policy doc</span>
+      </a>
+      <a href="https://github.com/joshmadakor1/lognpacific-public/tree/main/automation" target="_blank" rel="noopener" class="icon-box">
+        <div class="arrow">&rarr;</div>
+        <div class="ic">&#9881;</div>
+        <h5>Remediation Scripts</h5>
+        <span>PowerShell/Bash automation</span>
+      </a>
+      <a href="https://docs.google.com/spreadsheets/d/1FTtFfZYmFsNLU6pm8nTzsKyKE-d2ftXzX_DPwcnFNfA/edit?gid=0#gid=0" target="_blank" rel="noopener" class="icon-box">
+        <div class="ic">&#128202;</div>
+        <div class="arrow">&rarr;</div>
+        <h5>Remediation Data</h5>
+        <span>Full before/after scan results</span>
+      </a>
+      <a href="https://youtu.be/zOFPkTa9kY8" target="_blank" rel="noopener" class="icon-box">
+        <div class="arrow">&rarr;</div>
+        <div class="ic">&#9654;</div>
+        <h5>CAB Meeting</h5>
+        <span>Change Control Board walkthrough</span>
+      </a>
+    </div>
   </div>
 </section>
 
-<section>
-  <div class="eyebrow2" data-n="01">Building the Program</div>
-  <h2>Policy, buy-in, and sign-off</h2>
+<section style="padding-top:0;">
+  <div class="wrap">
+    <div class="eyebrow"><span class="dot"></span> METHODOLOGY</div>
+    <h2 class="head">Policy, Buy-In, and Sign-Off<span class="cur">_</span></h2>
+    <div class="phase-strip">
+      <div class="phase-card"><div class="num">PHASE 1</div><h4>Policy Draft</h4><p>Drafted a Vulnerability Management Policy outlining scope, responsibilities, and remediation timelines.</p></div>
+      <div class="phase-card p2"><div class="num">PHASE 2</div><h4>Stakeholder Buy-In</h4><p>Mock meeting with the server team extended the critical remediation window from 48 hours to one week.</p></div>
+      <div class="phase-card p3"><div class="num">PHASE 3</div><h4>Leadership Sign-Off</h4><p>Revised policy received final approval from senior leadership, giving it authority to guide the program.</p></div>
+      <div class="phase-card p4"><div class="num">PHASE 4</div><h4>Scan Permission</h4><p>Negotiated a single-server pilot scan with just-in-time AD credentials for controlled, monitored access.</p></div>
+    </div>
 
-  <div class="phase"><div class="num">01</div><div><div class="ph">Policy Draft</div><h3>Starting from nothing</h3><p>Drafted a Vulnerability Management Policy outlining scope, responsibilities, and remediation timelines &mdash; the starting point for stakeholder engagement.</p></div></div>
-
-  <div class="phase"><div class="num">02</div><div><div class="ph">Stakeholder Buy-In</div><h3>Negotiating the real world</h3><p>A mock meeting with the server team assessed their capability to meet remediation timelines. Feedback led to extending the critical remediation window from 48 hours to one week &mdash; a realistic, collaborative compromise.</p></div></div>
-
-  <div class="phase"><div class="num">03</div><div><div class="ph">Leadership Sign-Off</div><h3>Making it official</h3><p>After revisions addressing aggressive timelines, the policy received final approval from senior leadership, giving it the authority to guide the program and resolve pushback.</p></div></div>
-
-  <div class="phase"><div class="num">04</div><div><div class="ph">Scan Permission</div><h3>Earning trust one server at a time</h3><p>Negotiated with the server team to scan a single server first, monitoring resource impact, using just-in-time Active Directory credentials for secure, controlled access.</p></div></div>
-</section>
-
-<section>
-  <div class="eyebrow2" data-n="02">Assessment &amp; Prioritization</div>
-  <h2>What got fixed first, and why</h2>
-  <p>After the initial authenticated scan, vulnerabilities were assessed and prioritized by ease of remediation and impact:</p>
-  <div class="grid2">
-    <div class="card"><div class="k">Priority 1</div><p>Third-party software removal (outdated Wireshark)</p></div>
-    <div class="card"><div class="k">Priority 2</div><p>Secure configuration &mdash; insecure protocols &amp; cipher suites</p></div>
-    <div class="card"><div class="k">Priority 3</div><p>Secure configuration &mdash; Guest account group membership</p></div>
-    <div class="card"><div class="k">Priority 4</div><p>Windows OS updates</p></div>
-  </div>
-  <p>Remediation packages and scan reports were distributed to the server team, reviewed in a follow-up meeting, and submitted to the Change Control Board (CAB) &mdash; approved with a rollback script and a tiered deployment approach.</p>
-</section>
-
-<section>
-  <div class="eyebrow2" data-n="03">Remediation Cycle</div>
-  <h2>Four rounds, verified each time</h2>
-
-  <div class="twrap"><table>
-    <thead><tr><th>Round</th><th>Target</th><th>Method</th><th>Verified By</th></tr></thead>
-    <tbody>
-      <tr><td class="mono">1</td><td>Outdated Wireshark</td><td>PowerShell removal script</td><td>Follow-up scan &mdash; confirmed clean</td></tr>
-      <tr><td class="mono">2</td><td>Insecure Protocols &amp; Ciphers</td><td>PowerShell protocol/cipher toggle scripts</td><td>Follow-up scan &mdash; confirmed clean</td></tr>
-      <tr><td class="mono">3</td><td>Guest Account Group Membership</td><td>Removed Guest from Administrators group</td><td>Follow-up scan &mdash; confirmed clean</td></tr>
-      <tr><td class="mono">4</td><td>Windows OS Updates</td><td>Re-enabled and applied all pending updates</td><td>Final scan &mdash; fully up to date</td></tr>
-    </tbody>
-  </table></div>
-
-  <div class="call tip">
-    <div class="h">First Cycle Remediation Summary</div>
-    <p>The remediation process reduced total vulnerabilities by <strong>80%</strong>, from 30 to 6. Critical vulnerabilities were resolved by the second scan (<strong>100%</strong>). High-severity vulnerabilities dropped by <strong>90%</strong>. Mediums were reduced by 76%. In a production environment, asset criticality would further guide future remediation priorities.</p>
+    <div class="scenario-box">
+      <div class="tag-label">&#9889; PROGRAM SCOPE</div>
+      <p><span class="sit">INCEPTION STATE:</span> the organization has no existing policy or vulnerability management practices in place. <span class="sit">COMPLETION STATE:</span> a formal policy is enacted, stakeholder buy-in is secured, and a full cycle of organization-wide vulnerability remediation is successfully completed. Technology used: Tenable, Azure Virtual Machines (Nessus), and PowerShell/Bash remediation scripts.</p>
+    </div>
   </div>
 </section>
 
-<section>
-  <div class="eyebrow2" data-n="04">Maintenance Mode</div>
-  <h2>What happens after the first cycle</h2>
-  <p>After completing the initial remediation cycle, the program transitions into ongoing maintenance &mdash; ensuring vulnerabilities continue to be managed proactively rather than treated as a one-time project.</p>
-  <div class="grid2">
-    <div class="card"><div class="k">Scheduled Scans</div><p>Regular scans (weekly or monthly) to detect new vulnerabilities as systems evolve.</p></div>
-    <div class="card"><div class="k">Patch Management</div><p>Continuous application of security patches &mdash; no critical vulnerability left unpatched.</p></div>
-    <div class="card"><div class="k">Remediation Follow-ups</div><p>New vulnerabilities addressed promptly, prioritized by risk and impact.</p></div>
-    <div class="card"><div class="k">Audit &amp; Compliance</div><p>Internal audits ensure alignment with the vulnerability management policy and external regulations.</p></div>
+<section style="padding-top:0;">
+  <div class="wrap">
+    <div class="eyebrow" style="color:var(--orange);"><span class="dot" style="background:var(--orange); box-shadow:0 0 8px var(--orange);"></span> REMEDIATION_CYCLE</div>
+    <h2 class="head">Four Rounds, Verified Each Time<span class="cur">_</span></h2>
+    <p class="sub" style="max-width:640px;">After assessment and prioritization, vulnerabilities were remediated in priority order and confirmed with a follow-up scan each round.</p>
+
+    <div class="timeline-grid">
+      <div class="timeline-card">
+        <div class="ts">ROUND 1</div>
+        <h5>Third-Party Software Removal</h5>
+        <p>Outdated Wireshark removed via PowerShell script.</p>
+        <span class="badge success">VERIFIED</span>
+      </div>
+      <div class="timeline-card">
+        <div class="ts">ROUND 2</div>
+        <h5>Insecure Protocols &amp; Ciphers</h5>
+        <p>Deprecated protocols and cipher suites toggled off via script.</p>
+        <span class="badge success">VERIFIED</span>
+      </div>
+      <div class="timeline-card">
+        <div class="ts">ROUND 3</div>
+        <h5>Guest Account Group Membership</h5>
+        <p>Guest account removed from the local Administrators group.</p>
+        <span class="badge success">VERIFIED</span>
+      </div>
+      <div class="timeline-card">
+        <div class="ts">ROUND 4</div>
+        <h5>Windows OS Updates</h5>
+        <p>Updates re-enabled and applied until fully current.</p>
+        <span class="badge success">VERIFIED</span>
+      </div>
+    </div>
+
+    <div class="scenario-box" style="border-left-color:var(--green);">
+      <div class="tag-label" style="color:var(--green);">&#10003; FIRST CYCLE SUMMARY</div>
+      <p>The remediation process reduced total vulnerabilities by <b style="color:var(--text);">80%</b>, from 30 to 6. Critical vulnerabilities were resolved by the second scan (<b style="color:var(--text);">100%</b>). High-severity vulnerabilities dropped by <b style="color:var(--text);">90%</b>. Mediums were reduced by 76%. In a production environment, asset criticality would further guide future remediation priorities.</p>
+    </div>
   </div>
 </section>
 
-<div class="footer">
-  <span>Aboubacar Sakho &middot; Official Cyber Range Project</span>
-  <span>Tenable &middot; Azure &middot; PowerShell/Bash</span>
-</div>
+<section style="padding-top:0;">
+  <div class="wrap">
+    <div class="eyebrow"><span class="dot"></span> ONGOING</div>
+    <h2 class="head">Maintenance Mode<span class="cur">_</span></h2>
+    <div class="icon-grid">
+      <div class="icon-box"><div class="ic">&#8635;</div><h5>Scheduled Scans</h5><span>Weekly/monthly detection of new vulnerabilities</span></div>
+      <div class="icon-box"><div class="ic">&#128274;</div><h5>Patch Management</h5><span>Continuous application of security patches</span></div>
+      <div class="icon-box"><div class="ic">&#128203;</div><h5>Audit &amp; Compliance</h5><span>Internal audits against policy and regulations</span></div>
+    </div>
+  </div>
+</section>
 
-</div>
-</body></html>
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="foot-brand">SAKHO_SEC</div>
+        <div class="foot-tagline">FIND<span class="r">EVIL</span>.BUILD<span class="r">SYSTEMS</span>.<span class="cur">_</span></div>
+        <div class="foot-sub">Offense. Defense. Code.</div>
+      </div>
+      <div class="foot-social">
+        <a href="https://github.com/mrabousakho" title="GitHub" target="_blank" rel="noopener">&#8981;</a>
+        <a href="https://www.linkedin.com/in/asakho/" title="LinkedIn" target="_blank" rel="noopener">in</a>
+        <a href="mailto:aboubacar.sakho@email.com" title="Email">&#9993;</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
