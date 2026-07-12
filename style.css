@@ -382,3 +382,60 @@ footer{
   border-radius:var(--radius-sm);
 }
 .foot-social a:hover{border-color:var(--red); color:var(--red); box-shadow:0 0 14px rgba(255,68,51,0.3); transform:translateY(-2px);}
+
+/* ================= command palette ================= */
+.cmdk-overlay{
+  position:fixed; inset:0; z-index:999;
+  background:rgba(4,5,6,0.72); backdrop-filter:blur(3px);
+  display:none; align-items:flex-start; justify-content:center;
+  padding-top:14vh;
+}
+.cmdk-overlay.open{display:flex;}
+.cmdk-box{
+  width:min(560px, 90vw);
+  background:var(--panel-light); border:1px solid var(--border); border-radius:var(--radius);
+  box-shadow:0 0 0 1px rgba(255,68,51,0.15), 0 20px 60px rgba(0,0,0,0.6);
+  overflow:hidden;
+}
+.cmdk-input-row{display:flex; align-items:center; gap:10px; padding:16px 18px; border-bottom:1px solid var(--border-soft);}
+.cmdk-prompt{color:var(--red); font-weight:700;}
+.cmdk-input{
+  flex:1; background:transparent; border:none; outline:none;
+  color:var(--text); font-family:var(--mono); font-size:14px;
+}
+.cmdk-input::placeholder{color:var(--muted-2);}
+.cmdk-list{max-height:280px; overflow-y:auto;}
+.cmdk-row{
+  display:flex; justify-content:space-between; align-items:center; gap:12px;
+  padding:12px 18px; cursor:pointer; font-size:13px;
+}
+.cmdk-row .cmdk-label{color:var(--text); font-weight:600;}
+.cmdk-row .cmdk-desc{color:var(--muted-2); font-size:11px;}
+.cmdk-row.active{background:rgba(255,68,51,0.1); border-left:2px solid var(--red);}
+.cmdk-hint{padding:10px 18px; border-top:1px solid var(--border-soft); font-size:10px; color:var(--muted-2); letter-spacing:0.5px;}
+
+/* ================= matrix hero background ================= */
+#matrix-bg{
+  position:absolute; inset:0; z-index:0;
+  opacity:0.14; pointer-events:none;
+}
+.hero{position:relative; overflow:hidden;}
+.hero .wrap{position:relative; z-index:1;}
+
+/* ================= github stats widget ================= */
+.gh-stats{display:flex; gap:36px; flex-wrap:wrap; margin-top:20px;}
+.gh-stats .gh-stat b{display:block; font-size:22px; font-weight:800; color:var(--text);}
+.gh-stats .gh-stat span{font-size:10.5px; color:var(--muted-2); letter-spacing:1px; text-transform:uppercase;}
+.gh-stats.loading{opacity:0.4;}
+
+/* ================= case files filters ================= */
+.filter-row{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:28px;}
+.filter-btn{
+  border:1px solid var(--border); background:var(--panel); color:var(--muted);
+  padding:8px 14px; font-size:11px; letter-spacing:1px; text-transform:uppercase;
+  border-radius:var(--radius-sm); cursor:pointer; font-family:var(--mono);
+  transition:all .15s ease;
+}
+.filter-btn:hover{color:var(--text); border-color:var(--muted-2);}
+.filter-btn.active{color:var(--red); border-color:var(--red-dim); background:rgba(255,68,51,0.08);}
+.card.hidden-by-filter{display:none;}
