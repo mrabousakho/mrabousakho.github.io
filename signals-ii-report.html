@@ -1,130 +1,195 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Signals After the Noise 2 — Threat Hunt Report</title>
-<link rel="stylesheet" href="report-theme.css">
-</head><body>
-<div class="site-nav"><a href="case-files.html">&larr; Back to Case Files</a><span class="brand">SAKHO_SEC &middot; SIGNALS AFTER THE NOISE 2</span></div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Signals After the Noise 2 — Aboubacar Sakho</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2308090b'/%3E%3Ctext x='16' y='46' font-family='monospace' font-size='38' font-weight='bold' fill='%23ff4433'%3E%3E%3C/text%3E%3C/svg%3E">
+<meta name="description" content="Post-intrusion hunt reconstructing operator activity disguised as routine HealthCloud maintenance. 29/29 flags.">
+<meta property="og:title" content="Signals After the Noise 2 — Aboubacar Sakho">
+<meta property="og:description" content="Post-intrusion hunt reconstructing operator activity disguised as routine maintenance.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mrabousakho.github.io/signals-ii-report.html">
+<meta property="og:image" content="https://mrabousakho.github.io/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-<div class="cover-simple" style="--accent:#ff5d73;--accent2:#3a7bff">
+<header>
+  <nav>
+    <a href="index.html" class="brand">SAKHO<span class="underscore cur">_</span>SEC</a>
+    <div class="navlinks">
+      <a href="whoami.html" class="linkbox">WHOAMI</a>
+      <a href="case-files.html" class="linkbox">CASE FILES</a>
+      <a href="projects.html" class="linkbox">PROJECTS</a>
+      <a href="ops.html" class="linkbox">OPS</a>
+      <a href="contact.html" class="linkbox">CONTACT</a>
+    </div>
+  </nav>
+</header>
+
+<section class="report-hero">
   <div class="wrap">
-    <div class="eyebrow">Post-Intrusion Hunt &middot; Hunt 06</div>
-    <div class="ksig"></div>
-    <h1>Signals After<br>the Noise 2</h1>
-    <div class="sub">Operator activity reconstruction &mdash; deliberate intent hidden inside ordinary-looking telemetry.</div>
-    <div class="spacer"></div>
-    <div class="meta">
-      <div><span>Analyst</span><b>Aboubacar Sakho</b></div>
-      <div><span>Workspace</span><b>LAW-Cyber-Range</b></div>
-      <div><span>Primary Host</span><b>azwks-phtg-01</b></div>
-      <div><span>Window</span><b>Dec 13, 2025</b></div>
-      <div><span>Result</span><b class="ok">29 / 29 flags</b></div>
-      <div><span>Classification</span><b>Portfolio &middot; TLP:CLEAR</b></div>
+    <div style="text-align:center;">
+      <span class="eyebrow-pill">&#9679; POST-INTRUSION HUNT &middot; HUNT 06</span>
+    </div>
+    <h1>SIGNALS AFTER <span class="accent">THE NOISE 2</span><span class="cur">_</span></h1>
+    <div class="sub">azwks-phtg-01 &middot; Operator Activity Reconstruction</div>
+    <p class="desc">The operator's activity consistently mimicked legitimate HealthCloud administration &mdash; nearly all of it looked like routine maintenance. The value of this hunt is identifying deliberate intent hidden inside ordinary-looking telemetry.</p>
+    <div class="stats">
+      <div class="stat"><b>29/29</b><span>Flags Captured</span></div>
+      <div class="stat"><b>8</b><span>Hunt Phases</span></div>
+      <div class="stat"><b>280</b><span>Registry Modifications</span></div>
+      <div class="stat"><b>22</b><span>Healthcheck Beacons</span></div>
     </div>
   </div>
-</div>
+</section>
 
-<div class="body doc">
-
-<section>
-  <div class="eyebrow2" data-n="00">Executive Summary</div>
-  <h2>Maintenance that wasn't</h2>
-  <p class="lead">This hunt reconstructs operator activity on the PHTG estate following the confirmed initial access established in Hunt 05. The operator's activity consistently mimicked legitimate HealthCloud administration &mdash; nearly all of it looked like routine maintenance. The value of this hunt is identifying deliberate intent hidden inside ordinary-looking telemetry.</p>
-  <p>The operator entered via <strong>credential reuse</strong> (not brute force), moved laterally to a second host, deployed a full persistence framework masquerading as HealthCloud services, established dual C2 channels, tampered with Windows Defender, and concluded with a confirmed LSASS memory read &mdash; credential theft proven by telemetry.</p>
-
-  <div class="stats">
-    <div><b class="g">29/29</b><span>Flags Captured</span></div>
-    <div><b class="c">8</b><span>Hunt Phases</span></div>
-    <div><b class="a">280</b><span>Registry Modifications</span></div>
-    <div><b class="r">22</b><span>Healthcheck Beacons</span></div>
+<section style="padding-top:0;">
+  <div class="wrap">
+    <div class="eyebrow"><span class="dot"></span> DEEP_DIVE_RESOURCES</div>
+    <div class="icon-grid">
+      <a href="#timeline" class="icon-box">
+        <div class="arrow">&rarr;</div>
+        <div class="ic num" style="color:var(--blue);">16</div>
+        <h5>Timeline</h5>
+        <span>Minute-by-minute activity</span>
+      </a>
+      <a href="#ioc" class="icon-box">
+        <div class="arrow">&rarr;</div>
+        <div class="ic num" style="color:var(--green);">15+</div>
+        <h5>IOCs</h5>
+        <span>Host &amp; network indicators</span>
+      </a>
+      <a href="#kql" class="icon-box">
+        <div class="arrow">&rarr;</div>
+        <div class="ic num" style="color:var(--red);">7</div>
+        <h5>KQL Playbook</h5>
+        <span>Detection queries</span>
+      </a>
+    </div>
   </div>
 </section>
 
-<section>
-  <div class="eyebrow2" data-n="01">Cold Trail</div>
-  <h2>Credential reuse, not brute force</h2>
-  <p>The hunt brief assumed brute force. The telemetry proved otherwise: two IPs authenticated with <strong>zero failed attempts</strong>.</p>
-  <div class="twrap"><table>
-    <thead><tr><th>IP</th><th>Failed Logons</th><th>Successful Logons</th><th>Verdict</th></tr></thead>
-    <tbody>
-      <tr><td class="mono">173.244.55.131</td><td>4</td><td>13</td><td>Credential reuse</td></tr>
-      <tr><td class="mono">173.244.55.128</td><td>8</td><td>8</td><td>Credential reuse</td></tr>
-      <tr><td class="mono">142.111.152.58</td><td><span class="sev hi">0</span></td><td>4</td><td>Credentials known in advance</td></tr>
-      <tr><td class="mono">173.239.218.124</td><td><span class="sev hi">0</span></td><td>2</td><td>Credentials known in advance</td></tr>
-    </tbody>
-  </table></div>
-</section>
-
-<section>
-  <div class="eyebrow2" data-n="02">First Footsteps</div>
-  <h2>Why the script was named "_.ps1"</h2>
-  <div class="code"><div class="bar"><span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span><span class="lbl">first operator script &middot; 10:11:42</span></div>
-  <pre>powershell.exe -WindowStyle Hidden -ExecutionPolicy Bypass -File "C:\Users\vmAdminUsername\Documents\PHTG\_.ps1"</pre></div>
-  <div class="call insight">
-    <div class="h">Why "_.ps1"?</div>
-    <p>An underscore sorts to the bottom of directory listings &mdash; designed to be overlooked during casual inspection.</p>
-  </div>
-  <p>Three scripts launched in rapid succession, each carrying the same three signature flags: <span class="mono">-NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass</span>.</p>
-</section>
-
-<section>
-  <div class="eyebrow2" data-n="03">The Beacon Pair</div>
-  <h2>Two parallel C2 mechanisms</h2>
-  <div class="twrap"><table>
-    <thead><tr><th>Channel</th><th>Mechanism</th><th>Benefit</th></tr></thead>
-    <tbody>
-      <tr><td class="mono">PHTGHealthCloudSvc.exe /healthcheck</td><td>LOLBin masquerade (claims OriginalFileName = bitsadmin.exe)</td><td>22 executions &mdash; blends with service health checks</td></tr>
-      <tr><td class="mono">Invoke-WebRequest -EncodedCommand</td><td>Base64-obfuscated PowerShell beacons</td><td>Evades simple string detection</td></tr>
-    </tbody>
-  </table></div>
-  <p>Why two channels? Resilience &mdash; one survives if the other is cut &mdash; plus detection splitting: neither channel alone crosses the alert threshold.</p>
-</section>
-
-<section>
-  <div class="eyebrow2" data-n="04">Anti-Forensics</div>
-  <h2>An exclusion that existed for seconds</h2>
-  <div class="code"><div class="bar"><span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span><span class="lbl">temporary exclusion pattern</span></div>
-  <pre>Add-MpPreference -ExclusionPath "C:\Users\vmAdminUsername\Documents\PHTG"
-# ... execute _.ps1 ...
-Remove-MpPreference -ExclusionPath "C:\Users\vmAdminUsername\Documents\PHTG"</pre></div>
-  <p>The Defender exclusion existed only for seconds &mdash; no permanent registry trace left behind. This is sophisticated anti-forensics, not a careless operator.</p>
-</section>
-
-<section>
-  <div class="eyebrow2" data-n="05">Credential Theft — LSASS</div>
-  <h2>The three-step chain</h2>
-  <div class="twrap"><table>
-    <thead><tr><th>Step</th><th>ActionType</th><th>DesiredAccess</th><th>Meaning</th></tr></thead>
-    <tbody>
-      <tr><td class="mono">1</td><td>OpenProcessApiCall</td><td class="mono">0x1410</td><td>PROCESS_QUERY_INFORMATION &mdash; low privilege probe</td></tr>
-      <tr><td class="mono">2</td><td>OpenProcessApiCall</td><td class="mono">0x1F0FFF</td><td><strong>PROCESS_ALL_ACCESS</strong> &mdash; full unrestricted</td></tr>
-      <tr><td class="mono">3</td><td>ReadProcessMemoryApiCall</td><td>&mdash;</td><td><strong>CONFIRMED: memory read, credentials dumped</strong></td></tr>
-    </tbody>
-  </table></div>
-  <div class="call crit">
-    <div class="h">High-Fidelity Indicator</div>
-    <p>PROCESS_ALL_ACCESS (0x1F0FFF) on lsass.exe from a non-system PowerShell process is one of the highest-fidelity credential theft indicators in Windows telemetry.</p>
+<section style="padding-top:0;">
+  <div class="wrap">
+    <div class="eyebrow"><span class="dot"></span> COLD TRAIL</div>
+    <h2 class="head">Credential Reuse, Not Brute Force<span class="cur">_</span></h2>
+    <p class="sub" style="max-width:680px;">The hunt brief assumed brute force. The telemetry proved otherwise &mdash; two IPs authenticated with zero failed attempts.</p>
+    <div class="grid cols-2">
+      <div class="card"><div class="top-row"><h3>142.111.152.58</h3><span class="badge critical">0 FAILS / 4 SUCCESS</span></div><p class="desc">Zero failed logons before success &mdash; credentials known in advance.</p></div>
+      <div class="card"><div class="top-row"><h3>173.239.218.124</h3><span class="badge critical">0 FAILS / 2 SUCCESS</span></div><p class="desc">Same pattern &mdash; credential reuse, not brute force (T1078).</p></div>
+    </div>
   </div>
 </section>
 
-<section>
-  <div class="eyebrow2" data-n="06">Detection Playbook</div>
-  <h2>Operator signature flags hunt</h2>
-  <div class="code"><div class="bar"><span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span><span class="lbl">KQL &middot; query 02</span></div>
-  <pre>DeviceProcessEvents
+<section style="padding-top:0;">
+  <div class="wrap">
+    <div class="eyebrow" style="color:var(--orange);"><span class="dot" style="background:var(--orange); box-shadow:0 0 8px var(--orange);"></span> FIRST FOOTSTEPS</div>
+    <h2 class="head">Why the Script Was Named "_.ps1"<span class="cur">_</span></h2>
+    <div class="query-card" style="border-left-color:var(--orange);">
+      <div class="qhead"><h4>First Operator Script &middot; 10:11:42</h4><span class="tag">T1059.001</span></div>
+      <pre>powershell.exe -WindowStyle Hidden -ExecutionPolicy Bypass -File "C:\Users\vmAdminUsername\Documents\PHTG\_.ps1"</pre>
+      <p>An underscore sorts to the bottom of directory listings &mdash; designed to be overlooked during casual inspection. Three scripts launched in rapid succession, each carrying the same three signature flags: -NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass.</p>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0;">
+  <div class="wrap">
+    <div class="eyebrow" style="color:var(--blue);"><span class="dot" style="background:var(--blue); box-shadow:0 0 8px var(--blue);"></span> THE BEACON PAIR</div>
+    <h2 class="head">Two Parallel C2 Mechanisms<span class="cur">_</span></h2>
+    <div class="grid cols-2">
+      <div class="card"><div class="top-row"><h3>LOLBin Masquerade</h3><span class="badge high">22 EXECUTIONS</span></div><p class="desc">PHTGHealthCloudSvc.exe claims OriginalFileName = bitsadmin.exe &mdash; blends with service health checks.</p></div>
+      <div class="card"><div class="top-row"><h3>Encoded Beacons</h3><span class="badge high">BASE64</span></div><p class="desc">Invoke-WebRequest -EncodedCommand &mdash; obfuscated PowerShell that evades simple string detection.</p></div>
+    </div>
+    <p class="sub" style="max-width:680px; margin-top:16px;">Why two channels? Resilience &mdash; one survives if the other is cut &mdash; plus detection splitting: neither channel alone crosses the alert threshold.</p>
+  </div>
+</section>
+
+<section id="lsass" style="padding-top:0;">
+  <div class="wrap">
+    <div class="eyebrow" style="color:var(--red);"><span class="dot"></span> CREDENTIAL THEFT</div>
+    <h2 class="head">The Three-Step LSASS Chain<span class="cur">_</span></h2>
+    <div class="scenario-box">
+      <div class="tag-label">&#128274; HIGH-FIDELITY INDICATOR</div>
+      <p>Step 1: OpenProcessApiCall (0x1410, PROCESS_QUERY_INFORMATION &mdash; a probe). Step 2: OpenProcessApiCall (0x1F0FFF, PROCESS_ALL_ACCESS &mdash; full unrestricted). Step 3: ReadProcessMemoryApiCall &mdash; <b style="color:var(--text);">confirmed memory read, credentials dumped</b>. PROCESS_ALL_ACCESS on lsass.exe from a non-system PowerShell process is one of the highest-fidelity credential theft indicators in Windows telemetry.</p>
+    </div>
+  </div>
+</section>
+
+<section id="timeline" style="padding-top:0;">
+  <div class="wrap">
+    <div class="eyebrow" style="color:var(--blue);"><span class="dot" style="background:var(--blue); box-shadow:0 0 8px var(--blue);"></span> FULL_TIMELINE</div>
+    <h2 class="head">10:11 &mdash; 10:16, Minute by Minute<span class="cur">_</span></h2>
+    <div class="timeline-grid">
+      <div class="timeline-card"><div class="ts">10:11:42</div><h5>First Operator Script</h5><p>_.ps1 executed &mdash; Hidden + Bypass.</p><span class="badge success">T1059.001</span></div>
+      <div class="timeline-card"><div class="ts">10:12:16</div><h5>Tool Pull</h5><p>Outbound call to updates.health-cloud.cc.</p><span class="badge success">T1105</span></div>
+      <div class="timeline-card"><div class="ts">10:12:17</div><h5>Beacon Loop Begins</h5><p>PHTGHealthCloudSvc.exe /healthcheck &mdash; 22 total runs.</p><span class="badge success">C2</span></div>
+      <div class="timeline-card"><div class="ts">10:13:00</div><h5>Startup Persistence</h5><p>PHTG HealthCloud.lnk dropped in Startup folder.</p><span class="badge success">T1547.001</span></div>
+      <div class="timeline-card"><div class="ts">10:13:01</div><h5>Run Key Persistence</h5><p>HealthCloudTray.ps1 written to HKCU Run key.</p><span class="badge success">Persistence</span></div>
+      <div class="timeline-card"><div class="ts">10:14:10</div><h5>AMSI Probe</h5><p>amsi_probe.ps1 &mdash; testing AV scan interface.</p><span class="badge success">Evasion</span></div>
+      <div class="timeline-card"><div class="ts">10:14:38</div><h5>Credential Dump Confirmed</h5><p>ReadProcessMemoryApiCall &mdash; lsass.exe memory read.</p><span class="badge success">T1003.001</span></div>
+      <div class="timeline-card"><div class="ts">10:16:09</div><h5>Final Stage</h5><p>phtg_health_diag_update_FLAG-22.bat executed.</p><span class="badge success">Closing</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="ioc" style="padding-top:0;">
+  <div class="wrap">
+    <div class="eyebrow" style="color:var(--green);"><span class="dot" style="background:var(--green); box-shadow:0 0 8px var(--green);"></span> INDICATORS_OF_COMPROMISE</div>
+    <h2 class="head">Host &amp; Network IOCs<span class="cur">_</span></h2>
+    <div class="grid cols-2">
+      <div class="card"><div class="top-row"><h3>PHTGHealthCloudSvc.exe</h3><span class="badge critical">MASQUERADE</span></div><p class="desc">Claims to be bitsadmin.exe &mdash; 22 beacon executions.</p></div>
+      <div class="card"><div class="top-row"><h3>updates.health-cloud.cc</h3><span class="badge critical">C2 DOMAIN</span></div><p class="desc">Tool delivery &mdash; payload pull.</p></div>
+      <div class="card"><div class="top-row"><h3>status.health-cloud.cc</h3><span class="badge critical">C2 DOMAIN</span></div><p class="desc">Beacon callbacks &mdash; check-in/status.</p></div>
+      <div class="card"><div class="top-row"><h3>HKCU...\Run\PHTGHealthCloudTray</h3><span class="badge critical">REGKEY</span></div><p class="desc">Run key persistence &mdash; fired twice.</p></div>
+      <div class="card"><div class="top-row"><h3>vmadminusername</h3><span class="badge critical">ACCOUNT</span></div><p class="desc">Compromised &mdash; used across both hosts.</p></div>
+      <div class="card"><div class="top-row"><h3>DesiredAccess 0x1F0FFF</h3><span class="badge critical">LSASS ACCESS</span></div><p class="desc">PROCESS_ALL_ACCESS &mdash; confirmed credential dump.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="kql" style="padding-top:0;">
+  <div class="wrap">
+    <div class="eyebrow" style="color:var(--red);"><span class="dot"></span> KQL_PLAYBOOK</div>
+    <h2 class="head">Operator Signature Flags Hunt<span class="cur">_</span></h2>
+    <div class="query-card">
+      <div class="qhead"><h4>Query 02 &middot; Operator Signature Flags</h4><span class="tag">Detection</span></div>
+      <pre>DeviceProcessEvents
 | where DeviceName == "azwks-phtg-01"
 | where FileName =~ "powershell.exe"
 | where ProcessCommandLine has_any (
     "-WindowStyle Hidden", "-ExecutionPolicy Bypass",
     "-EncodedCommand", "-NoProfile")
 | project TimeGenerated, ProcessCommandLine, InitiatingProcessFileName
-| order by TimeGenerated asc</pre></div>
-  <p>Any PowerShell process in a Run key or Startup entry carrying all three signature flags is operator tooling &mdash; legitimate software never configures persistence this way.</p>
+| order by TimeGenerated asc</pre>
+      <p>Any PowerShell process carrying all three signature flags is operator tooling &mdash; legitimate software never configures persistence this way.</p>
+    </div>
+  </div>
 </section>
 
-<div class="footer">
-  <span>Aboubacar Sakho &middot; Cyber Range Threat Hunt</span>
-  <span>Azure Sentinel &middot; 29/29 flags &middot; 8 phases gated</span>
-</div>
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="foot-brand">SAKHO_SEC</div>
+        <div class="foot-tagline">FIND<span class="r">EVIL</span>.BUILD<span class="r">SYSTEMS</span>.<span class="cur">_</span></div>
+        <div class="foot-sub">Offense. Defense. Code.</div>
+      </div>
+      <div class="foot-social">
+        <a href="https://github.com/mrabousakho" title="GitHub" target="_blank" rel="noopener">&#8981;</a>
+        <a href="https://www.linkedin.com/in/asakho/" title="LinkedIn" target="_blank" rel="noopener">in</a>
+        <a href="mailto:aboubacar.sakho@email.com" title="Email">&#9993;</a>
+      </div>
+    </div>
+  </div>
+</footer>
 
-</div>
-</body></html>
+<script src="script.js"></script>
+</body>
+</html>
