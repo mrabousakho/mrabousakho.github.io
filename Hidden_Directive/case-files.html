@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Case Files — Aboubacar Sakho</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2308090b'/%3E%3Ctext x='16' y='46' font-family='monospace' font-size='38' font-weight='bold' fill='%23ff4433'%3E%3E%3C/text%3E%3C/svg%3E">
+<meta name="description" content="Threat hunts and investigations, mapped to MITRE ATT&CK, with full write-ups on GitHub.">
+<meta property="og:title" content="Case Files — Aboubacar Sakho">
+<meta property="og:description" content="Threat hunts and investigations, mapped to MITRE ATT&CK, with full write-ups on GitHub.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mrabousakho.github.io/case-files.html">
+<meta property="og:image" content="https://mrabousakho.github.io/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Case Files — Aboubacar Sakho">
+<meta name="twitter:description" content="Threat hunts and investigations, mapped to MITRE ATT&CK, with full write-ups on GitHub.">
+<meta name="twitter:image" content="https://mrabousakho.github.io/og-image.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <nav>
+    <a href="index.html" class="brand">SAKHO<span class="underscore cur">_</span>SEC</a>
+    <div class="navlinks">
+      <a href="whoami.html" class="linkbox">WHOAMI</a>
+      <a href="case-files.html" class="linkbox">CASE FILES</a>
+      <a href="projects.html" class="linkbox">PROJECTS</a>
+      <a href="ops.html" class="linkbox">OPS</a>
+      <a href="contact.html" class="linkbox">CONTACT</a>
+    </div>
+  </nav>
+</header>
+
+<!-- ================= HEADER ================= -->
+<section style="padding-bottom:40px;">
+  <div class="wrap">
+    <div class="eyebrow" style="color:var(--red);"><span class="dot"></span> CASE FILES</div>
+    <h1 class="title" style="font-size:44px;">Threat Hunts &amp; Investigations<span class="cur">_</span></h1>
+    <p class="sub" style="max-width:640px;">
+      Simulated intrusions, one real one, and the write-ups that came out of each —
+      reconstructed from SIEM telemetry, mapped to MITRE ATT&amp;CK, and documented the
+      way I'd want a report handed to me.
+    </p>
+
+    <div class="stats">
+      <div class="stat"><b>100+</b><span>Investigations Total</span></div>
+      <div class="stat"><b>13</b><span>Full Write-Ups Below</span></div>
+      <div class="stat"><b>18/18</b><span>Northpeak Descent Flags</span></div>
+      <div class="stat"><b>1,000+</b><span>KQL/SPL Queries Authored</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= HUNT REPORTS ================= -->
+<section style="padding-top:0;">
+  <div class="wrap">
+    <div class="filter-row" id="filter-row">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="critical">Critical</button>
+      <button class="filter-btn" data-filter="high">High</button>
+      <button class="filter-btn" data-filter="active">In Progress</button>
+      <button class="filter-btn" data-filter="perfect">Perfect Score</button>
+    </div>
+    <div class="grid cols-2" id="case-grid">
+
+      <div class="card">
+        <div class="top-row"><h3>Northpeak Descent</h3><span class="badge perfect">18/18</span></div>
+        <div class="meta">LOG(N) Pacific Cyber Range · Reviewed by Josh Madakor</div>
+        <p class="desc">Full-flag threat hunt scored a perfect 18/18 — one of only four analysts on the range to do so. Full report and a companion KQL query clinic, built into the site.</p>
+        <div class="tags"><span class="tag">KQL</span><span class="tag">Sentinel</span><span class="tag">MDE</span></div>
+        <div style="display:flex; gap:10px; margin-top:14px;">
+          <a href="northpeak-report.html" class="linkbox" style="padding:7px 12px; font-size:10.5px;">FULL REPORT ↗</a>
+          <a href="northpeak-clinic.html" class="linkbox" style="padding:7px 12px; font-size:10.5px;">KQL CLINIC ↗</a>
+        </div>
+      </div>
+
+      <a href="hidden-directive-report.html" class="card">
+        <div class="top-row"><h3>Hidden Directive</h3><span class="badge critical">DOMAIN BREACH</span></div>
+        <div class="meta">GF-INC-2026-0704 · Live Microsoft Sentinel · Dual-SIEM</div>
+        <p class="desc">A weaponised AI page-summariser to a forged Kerberos Golden Ticket — full Active Directory domain compromise reconstructed across two SIEMs, with a narrated 13-stage walkthrough and downloadable report kit.</p>
+        <div class="tags"><span class="tag">Dual SIEM</span><span class="tag">Golden Ticket</span><span class="tag">AI Abuse</span></div>
+        <div class="view-repo">Read the full report →</div>
+      </a>
+
+      <div class="card">
+        <div class="top-row"><h3>Rocky Clinic OpenEMR Breach</h3><span class="badge critical">CRITICAL</span></div>
+        <div class="meta">Hunt 07 · Microsoft Sentinel · rocky83 (Rocky Linux 9.7)</div>
+        <p class="desc">Dockerized OpenEMR host compromised through several attacker accounts, a Python reverse shell C2 on port 443, and persistence disguised as a monitoring service. Six external IPs traced across the kill chain.</p>
+        <div class="tags"><span class="tag">Docker</span><span class="tag">Linux</span><span class="tag">C2</span></div>
+      </div>
+
+      <div class="card">
+        <div class="top-row"><h3>Signals Before/After the Noise</h3><span class="badge high">HIGH</span></div>
+        <div class="meta">Hunts 05 &amp; 06 · Azure VM (azwks-phtg-02)</div>
+        <p class="desc">RDP compromise traced back to a LinkedIn OPSEC failure, followed by lateral movement to a second VM, service-masquerading persistence, dual C2 to a lookalike domain, and LSASS credential dumping.</p>
+        <div class="tags"><span class="tag">RDP</span><span class="tag">LSASS</span><span class="tag">Persistence</span></div>
+        <div style="display:flex; gap:10px; margin-top:14px;">
+          <a href="https://github.com/mrabousakho/SIGNALS_BEFORE_THE_NOISE" target="_blank" rel="noopener" class="linkbox" style="padding:7px 12px; font-size:10.5px;">PART I ↗</a>
+          <a href="signals-ii-report.html" class="linkbox" style="padding:7px 12px; font-size:10.5px;">PART II · FULL REPORT ↗</a>
+        </div>
+      </div>
+
+      <a href="hunt09-report.html" class="card">
+        <div class="top-row"><h3>Hunt 09: Lateral Descent</h3><span class="badge perfect">39/39</span></div>
+        <div class="meta">greenfield.local · Sentinel + Defender XDR</div>
+        <p class="desc">Full-chain Active Directory compromise — Kerberoasting to DCSync to Pass-the-Hash to Domain Admin, ending in ransomware staged for a domain-wide GPO push. Full clear.</p>
+        <div class="tags"><span class="tag">Lateral Movement</span><span class="tag">Active Directory</span></div>
+        <div class="view-repo">Read the full report →</div>
+      </a>
+
+      <a href="https://github.com/mrabousakho/ai-threat-hunting" target="_blank" rel="noopener" class="card">
+        <div class="top-row"><h3>XorDDoS / .diicot Compromise</h3><span class="badge critical">REAL INCIDENT</span></div>
+        <div class="meta">INC-367047 · dugglescript-linux · Discovered autonomously</div>
+        <p class="desc">Not a lab exercise. My own SOC agent pipeline surfaced this cryptominer compromise on a live host while running unattended — full writeup covers what the agent saw and how it decided to escalate.</p>
+        <div class="tags"><span class="tag">Cryptominer</span><span class="tag">Autonomous Detection</span></div>
+        <div class="view-repo">View repo on GitHub →</div>
+      </a>
+
+      <div class="card">
+        <div class="top-row"><h3>Fake IT Support Social Engineering</h3><span class="badge high">TRAINING</span></div>
+        <div class="meta">gab-intern-vm · IR-2025-0916-RDP</div>
+        <p class="desc">Reconstructed an RDP-based intrusion on an intern workstation, then built out the attacker-profiler query methodology that carried into every hunt after it.</p>
+        <div class="tags"><span class="tag">Social Engineering</span><span class="tag">RDP</span></div>
+      </div>
+
+      <a href="silent-corridor-report.html" class="card">
+        <div class="top-row"><h3>Silent Corridor</h3><span class="badge perfect">40/41</span></div>
+        <div class="meta">Octo Tempest (Scattered Spider) · Azure Sentinel</div>
+        <p class="desc">A confirmed Octo Tempest intrusion — AI session-file theft, a Sliver C2 implant, and four failed lateral-movement attempts blocked by Defender for Cloud.</p>
+        <div class="tags"><span class="tag">Threat Hunt</span><span class="tag">Octo Tempest</span></div>
+        <div class="view-repo">Read the full report →</div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================= FROM THE REPOSITORY ================= -->
+<section style="padding-top:0;">
+  <div class="wrap">
+    <div class="eyebrow" style="color:var(--blue);"><span class="dot" style="background:var(--blue); box-shadow:0 0 8px var(--blue);"></span> FROM THE REPOSITORY</div>
+    <h2 class="head">Full Write-Ups on GitHub<span class="cur">_</span></h2>
+    <p class="sub">The complete investigations, with evidence and queries — click any card to open the repo.</p>
+
+    <div class="grid cols-2" id="repo-grid">
+      <a href="https://github.com/mrabousakho/EMBERFORGE" target="_blank" rel="noopener" class="card">
+        <div class="top-row"><h3>EMBERFORGE</h3><span class="badge critical">FULL KILL CHAIN</span></div>
+        <div class="meta">github.com/mrabousakho/EMBERFORGE</div>
+        <p class="desc">Active Directory attack investigation reconstructing source-code exfiltration end to end: initial access → persistence → data staging → exfiltration.</p>
+        <div class="tags"><span class="tag">Active Directory</span><span class="tag">Exfiltration</span></div>
+        <div class="view-repo">View repo on GitHub →</div>
+      </a>
+
+      <a href="https://github.com/mrabousakho/Pacific-Financial-BEC" target="_blank" rel="noopener" class="card">
+        <div class="top-row"><h3>Pacific Financial BEC</h3><span class="badge high">EMAIL</span></div>
+        <div class="meta">github.com/mrabousakho/Pacific-Financial-BEC</div>
+        <p class="desc">Business email compromise investigation for Pacific Financial Services — attacker behavior, detection strategy, and full timeline.</p>
+        <div class="tags"><span class="tag">BEC</span><span class="tag">Email Security</span></div>
+        <div class="view-repo">View repo on GitHub →</div>
+      </a>
+
+      <a href="https://github.com/mrabousakho/Cloud_VM_Breach" target="_blank" rel="noopener" class="card">
+        <div class="top-row"><h3>Cloud VM Breach</h3><span class="badge high">CLOUD</span></div>
+        <div class="meta">github.com/mrabousakho/Cloud_VM_Breach</div>
+        <p class="desc">Analysis of unauthorized access, persistence, and lateral movement inside a compromised cloud VM.</p>
+        <div class="tags"><span class="tag">Cloud</span><span class="tag">Lateral Movement</span></div>
+        <div class="view-repo">View repo on GitHub →</div>
+      </a>
+
+      <a href="https://github.com/mrabousakho/Threat-Hunting-Scenario-Tor-Browser-Usage..-" target="_blank" rel="noopener" class="card">
+        <div class="top-row"><h3>Tor Browser Usage Detection</h3><span class="badge active">ENDPOINT</span></div>
+        <div class="meta">github.com/mrabousakho/Threat-Hunting-Scenario-Tor-Browser-Usage..-</div>
+        <p class="desc">Identifying anonymization tool usage through endpoint and network telemetry.</p>
+        <div class="tags"><span class="tag">Anonymization</span><span class="tag">Endpoint Telemetry</span></div>
+        <div class="view-repo">View repo on GitHub →</div>
+      </a>
+
+      <a href="https://github.com/mrabousakho/Vulnerability-Management-Project" target="_blank" rel="noopener" class="card">
+        <div class="top-row"><h3>Vulnerability Management Project</h3><span class="badge active">PROJECT</span></div>
+        <div class="meta">github.com/mrabousakho/Vulnerability-Management-Project</div>
+        <p class="desc">End-to-end vulnerability management lifecycle — risk prioritization and remediation strategy from start to finish.</p>
+        <div class="tags"><span class="tag">Risk Prioritization</span><span class="tag">Remediation</span></div>
+        <div class="view-repo">View repo on GitHub →</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= HUNT CLINIC ================= -->
+<section id="clinic" style="padding-top:0;">
+  <div class="wrap">
+    <div class="eyebrow" style="color:var(--green);"><span class="dot" style="background:var(--green); box-shadow:0 0 8px var(--green);"></span> FORENSIC CLINIC</div>
+    <h2 class="head">Hunt Clinic<span class="cur">_</span></h2>
+    <p class="sub">A deeper walkthrough of method, not just findings — how I actually worked the case, including the dead ends.</p>
+
+    <div class="terminal type-panel">
+      <div class="term-bar">
+        <div class="dots"><span></span><span></span><span></span></div>
+        clinic__northpeak_descent.md
+      </div>
+      <div class="term-body">
+        <div class="line"><span class="prompt">&gt;</span> <span class="type-target">clinic --case northpeak_descent --show methodology</span></div>
+      </div>
+    </div>
+
+    <div style="margin-top:24px;" class="journey">
+      <p><span class="hl2">Triage first.</span> Before touching a single flag, I scoped the alert queue and grouped
+      events by host and account, so I wasn't chasing eighteen separate stories — I was chasing one attacker
+      across eighteen checkpoints.</p>
+      <p><span class="hl2">Attempt before answer.</span> Every query in this hunt was written and run by me first.
+      Where I got stuck, I documented exactly what telemetry was missing rather than guessing — that gap is part
+      of the report, not hidden from it.</p>
+      <p><span class="hl">Result:</span> 18/18 flags, one of four perfect scores on the range, and a
+      repeatable KQL pattern I now reuse across dual-SIEM cases like Hidden Directive.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="foot-brand">SAKHO_SEC</div>
+        <div class="foot-tagline">FIND<span class="r">EVIL</span>.BUILD<span class="r">SYSTEMS</span>.<span class="cur">_</span></div>
+        <div class="foot-sub">Offense. Defense. Code.</div>
+      </div>
+      <div class="foot-social">
+        <a href="https://github.com/mrabousakho" title="GitHub">⌥</a>
+        <a href="https://www.linkedin.com/in/asakho/" title="LinkedIn">in</a>
+        <a href="mailto:aboubacar.sakho@email.com" title="Email">✉</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

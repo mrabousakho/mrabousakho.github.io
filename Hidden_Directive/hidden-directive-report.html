@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hidden Directive — Aboubacar Sakho</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2308090b'/%3E%3Ctext x='16' y='46' font-family='monospace' font-size='38' font-weight='bold' fill='%23ff4433'%3E%3E%3C/text%3E%3C/svg%3E">
+<meta name="description" content="GF-INC-2026-0704 — a weaponized AI page-summariser to a forged Kerberos Golden Ticket. Full Active Directory domain compromise reconstructed across two SIEMs. Narrated 13-stage walkthrough.">
+<meta property="og:title" content="Hidden Directive — Aboubacar Sakho">
+<meta property="og:description" content="From a weaponized AI tool to a forged Golden Ticket — a full AD domain compromise, reconstructed across Microsoft Sentinel (ASIM) and Defender XDR (MDE).">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mrabousakho.github.io/hidden-directive-report.html">
+<meta property="og:image" content="https://mrabousakho.github.io/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+  /* page-local additions — theme-consistent, scoped so they don't touch the global sheet */
+  .embed-wrap{position:relative;border:1px solid var(--line,#1c1f26);border-radius:12px;overflow:hidden;background:#05080e;box-shadow:0 18px 50px rgba(0,0,0,.45);}
+  .embed-16x9{position:relative;width:100%;padding-top:56.25%;}
+  .embed-16x9 iframe{position:absolute;inset:0;width:100%;height:100%;border:0;}
+  .embed-1x1{position:relative;width:100%;max-width:420px;padding-top:min(56.25%,420px);margin:0;}
+  .embed-1x1 iframe{position:absolute;inset:0;width:100%;height:100%;border:0;}
+  .embed-row{display:grid;grid-template-columns:1fr;gap:20px;align-items:start;}
+  @media(min-width:880px){.embed-row{grid-template-columns:1.55fr .9fr;}}
+  .dl-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;}
+  .dl-btn{display:flex;flex-direction:column;gap:6px;text-decoration:none;padding:16px 18px;border:1px solid var(--line,#1c1f26);border-radius:10px;background:rgba(255,255,255,.02);transition:.18s;}
+  .dl-btn:hover{border-color:var(--accent,#ff4433);transform:translateY(-2px);}
+  .dl-btn .dl-t{font-weight:700;color:var(--fg,#e6edf3);font-size:14px;}
+  .dl-btn .dl-s{font-size:12px;color:var(--muted-2,#7d8590);}
+  .dl-btn .dl-k{font-size:11px;font-weight:700;letter-spacing:1px;color:var(--accent,#ff4433);}
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <a href="index.html" class="brand">SAKHO<span class="underscore cur">_</span>SEC</a>
+    <div class="navlinks">
+      <a href="whoami.html" class="linkbox">WHOAMI</a>
+      <a href="case-files.html" class="linkbox">CASE FILES</a>
+      <a href="projects.html" class="linkbox">PROJECTS</a>
+      <a href="ops.html" class="linkbox">OPS</a>
+      <a href="contact.html" class="linkbox">CONTACT</a>
+    </div>
+  </nav>
+</header>
+
+<section class="report-hero">
+  <div class="wrap">
+    <div style="text-align:center;">
+      <span class="eyebrow-pill" style="color:var(--red);">&#9679; FULL DOMAIN COMPROMISE &middot; GOLDEN TICKET</span>
+    </div>
+    <h1>HIDDEN <span class="accent">DIRECTIVE</span><span class="cur">_</span></h1>
+    <div class="sub">Live Microsoft Sentinel &middot; Dual-SIEM (ASIM + Defender XDR) &middot; GF-INC-2026-0704</div>
+    <p class="desc">A financially-motivated operator weaponised Greenfield Logistics&rsquo; own AI page-summariser to land on a workstation, then escalated through the estate on reused and stolen credentials, dumped the domain controller, forged a Kerberos Golden Ticket, and exfiltrated Finance data to attacker cloud storage &mdash; all inside one working day. Reconstructed stage by stage across two SIEM workspaces, every finding cited to its telemetry.</p>
+    <div class="stats">
+      <div class="stat"><b>13</b><span>Stages Reconstructed</span></div>
+      <div class="stat"><b>~10hr</b><span>Foothold &rarr; Exfil</span></div>
+      <div class="stat"><b>5</b><span>Credentials Burned (incl. krbtgt)</span></div>
+      <div class="stat"><b>2</b><span>SIEM Workspaces</span></div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0;">
+  <div class="wrap">
+    <div class="eyebrow"><span class="dot"></span> DEEP_DIVE_RESOURCES</div>
+    <div class="icon-grid">
+      <a href="#watch" class="icon-box">
+        <div class="arrow">&rarr;</div>
+        <div class="ic">&#9654;</div>
+        <h5>Narrated Walkthrough</h5>
+        <span>13-stage explainer, self-running</span>
+      </a>
+      <a href="#ioc" class="icon-box">
+        <div class="arrow">&rarr;</div>
+        <div class="ic num" style="color:var(--purple);">14+</div>
+        <h5>IOCs</h5>
+        <span>Domains, IPs, files, accounts</span>
+      </a>
+      <a href="#mitre" class="icon-box">
+        <div class="arrow">&rarr;</div>
+        <div class="ic num" style="color:var(--red);">11</div>
+        <h5>MITRE ATT&amp;CK</h5>
+        <span>Techniques mapped</span>
+      </a>
+      <a href="#downloads" class="icon-box">
+        <div class="arrow">&rarr;</div>
+        <div class="ic">&#128196;</div>
+        <h5>Full Reports</h5>
+        <span>PDF &middot; deck &middot; KQL kit</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0;">
+  <div class="wrap">
+    <div class="eyebrow"><span class="dot"></span> ATTACK CHAIN</div>
+    <h2 class="head">One Day, Foothold to Domain<span class="cur">_</span></h2>
+    <div class="phase-strip">
+      <div class="phase-card"><div class="num">10:15</div><h4>Initial Access</h4><p>The AI page-summariser (python.exe) fetched an attacker page and was command-injected into a hidden, AMSI-bypassing PowerShell loader &rarr; AdaptixC2.</p></div>
+      <div class="phase-card p2"><div class="num">11:49</div><h4>Persistence &amp; SYSTEM</h4><p>sancadmin planted a scheduled task, a Run key, and a hijacked service (GFUpdaterSvc) &mdash; all executing as SYSTEM.</p></div>
+      <div class="phase-card p3"><div class="num">12:00</div><h4>Lateral &rarr; SRV01</h4><p>A svc_backup password spray landed a Type-3 logon onto the file/SQL server from the workstation.</p></div>
+      <div class="phase-card p4"><div class="num">15:47</div><h4>Domain Compromise</h4><p>svc_backup reached the DC; LSA secrets, SAM and NTDS were dumped and a Kerberos Golden Ticket was forged.</p></div>
+      <div class="phase-card"><div class="num">19:34</div><h4>Exfiltration</h4><p>Finance and domain data staged, compressed to exfil.zip, and uploaded over PowerShell to an attacker-controlled Azure Blob.</p></div>
+    </div>
+
+    <div class="scenario-box" style="border-left-color:var(--purple);">
+      <div class="tag-label" style="color:var(--purple);">&#9889; NOVEL ATTACK VECTOR</div>
+      <p>Initial access was neither a phish nor a CVE &mdash; it was a <b>trusted internal AI tool</b>. Greenfield&rsquo;s page-summariser fetches external web content on a schedule; the attacker served it a poisoned page whose contents were treated as instructions, driving the summariser&rsquo;s python.exe to spawn a PowerShell loader. Any automation that ingests untrusted external content is an attack surface most organisations haven&rsquo;t modelled yet.</p>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0;">
+  <div class="wrap">
+    <div class="eyebrow" style="color:var(--blue);"><span class="dot" style="background:var(--blue); box-shadow:0 0 8px var(--blue);"></span> METHOD &middot; TWO WORKSPACES</div>
+    <h2 class="head">Build the Spine, Confirm the Crown Jewels<span class="cur">_</span></h2>
+    <p class="sub" style="max-width:720px;">The evidence lived across two SIEMs, and neither told the whole story. Process, auth and network flows came from <b>LAW-SilentCorridor</b> (ASIM); LSASS access, NTDS/DCSync, the Golden Ticket and Defender&rsquo;s technique labels came from <b>LAW-Cyber-Range</b> (Defender XDR / MDE). The entry point was proven by pivoting to the <em>parent</em> of the first malicious PowerShell.</p>
+
+    <div class="query-card" style="border-left-color:var(--blue);">
+      <div class="qhead"><h4>Signature find &mdash; the entry vector</h4><span class="tag">T1059.001</span></div>
+      <pre>// LAW-SilentCorridor · what did the AI summariser spawn?
+WindowsProcess_CL
+| where DvcHostname has "GF-WS01"
+| where ActingProcessFilePath has "python.exe"
+| project TimeGenerated, ActorUsername, TargetProcessCommandLine
+| sort by TimeGenerated asc
+// -> powershell -NoP -W Hidden -Exec Bypass : AMSI bypass + DownloadData(cloud-endpoint.net) + XOR 0x4A shellcode inject</pre>
+      <p>Parent process <b>python.exe</b> (the summariser) launching a hidden, execution-policy-bypassing PowerShell is the whole case in one row &mdash; corroborated by network telemetry to cdn.cloud-endpoint.net seconds later.</p>
+    </div>
+
+    <div class="query-card" style="border-left-color:var(--green);">
+      <div class="qhead"><h4>Handover detection &mdash; catch it next time</h4><span class="tag mono">T1566 / T1059</span></div>
+      <pre>// Any automation / LLM tool spawning a shell
+WindowsProcess_CL
+| where ActingProcessFilePath has_any ("python.exe","node.exe")
+| where TargetProcessFilePath has_any ("powershell","cmd.exe","pwsh")
+| project TimeGenerated, DvcHostname, ActorUsername, ActingProcessFilePath, TargetProcessCommandLine</pre>
+      <p>Shipped to the defender alongside spray-landing (fail&rarr;success) and unsanctioned-cloud-egress rules, so the entry vector can&rsquo;t recur silently.</p>
+    </div>
+  </div>
+</section>
+
+<section id="watch" style="padding-top:0;">
+  <div class="wrap">
+    <div class="eyebrow" style="color:var(--red);"><span class="dot"></span> WATCH_THE_WALKTHROUGH</div>
+    <h2 class="head">13 Stages, Narrated<span class="cur">_</span></h2>
+    <p class="sub" style="max-width:720px;">A self-running explainer of the full hunt &mdash; C01 Scope &amp; Triage through C13 Close the Case. Press <b>&#9654; BEGIN BRIEFING</b>: the AI voice narrates each stage while the KQL types itself live and the kill-chain lights up. A 60-second teaser sits alongside it.</p>
+    <div class="embed-row">
+      <div>
+        <div class="embed-wrap"><div class="embed-16x9">
+          <iframe src="hidden-directive/explainer.html" title="Hidden Directive — narrated walkthrough" allow="fullscreen; autoplay" loading="lazy"></iframe>
+        </div></div>
+        <p style="font-size:12px;color:var(--muted-2);margin-top:8px;">Audio narration &middot; best in Chrome or Edge &middot; <a href="hidden-directive/explainer.html" target="_blank" rel="noopener" style="color:var(--accent);">open fullscreen &#8599;</a></p>
+      </div>
+      <div>
+        <div class="embed-wrap"><div class="embed-16x9">
+          <iframe src="hidden-directive/teaser.html" title="Hidden Directive — 60s teaser" loading="lazy"></iframe>
+        </div></div>
+        <p style="font-size:12px;color:var(--muted-2);margin-top:8px;">60-second teaser &middot; auto-loops &middot; <a href="hidden-directive/teaser.html" target="_blank" rel="noopener" style="color:var(--accent);">open &#8599;</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="ioc" style="padding-top:0;">
+  <div class="wrap">
+    <div class="eyebrow" style="color:var(--purple);"><span class="dot" style="background:var(--purple); box-shadow:0 0 8px var(--purple);"></span> INDICATORS_OF_COMPROMISE</div>
+    <h2 class="head">Domains, IPs, Files &amp; Accounts<span class="cur">_</span></h2>
+    <div class="grid cols-2">
+      <div class="card"><div class="top-row"><h3>cdn.cloud-endpoint.net</h3><span class="badge critical">C2 DOMAIN</span></div><p class="desc">Cloudflare-fronted loader &amp; stage-2 (also api.cloud-endpoint.net). Resolutions: 172.67.174.46, 104.21.30.237.</p></div>
+      <div class="card"><div class="top-row"><h3>57.155.101.212:443</h3><span class="badge critical">C2 BEACON</span></div><p class="desc">AdaptixC2 beacon over rundll32.exe.</p></div>
+      <div class="card"><div class="top-row"><h3>sanclogicart14191.blob.core.windows.net</h3><span class="badge critical">EXFIL</span></div><p class="desc">Attacker-controlled Azure Blob (20.209.179.65) &mdash; exfil.zip uploaded 19:34&ndash;19:46.</p></div>
+      <div class="card"><div class="top-row"><h3>10.1.0.120</h3><span class="badge high">OPERATOR HOST</span></div><p class="desc">Attacker jump/RDP box on the subnet &mdash; never its own device; RDP&rsquo;d into WS01 &amp; SRV01.</p></div>
+      <div class="card"><div class="top-row"><h3>C:\Windows\Temp\svchost_upd.exe</h3><span class="badge high">PAYLOAD</span></div><p class="desc">Stage-2 binary pulled via certutil; also svc.ps1 (SYSTEM loader).</p></div>
+      <div class="card"><div class="top-row"><h3>C:\ProgramData\GFUpdater\gfupdater.exe</h3><span class="badge high">SERVICE HIJACK</span></div><p class="desc">Legitimate GFUpdaterSvc binary replaced with the payload.</p></div>
+      <div class="card"><div class="top-row"><h3>MicrosoftHealthUpdate &middot; WindowsHealthService</h3><span class="badge high">PERSISTENCE</span></div><p class="desc">Masqueraded scheduled task &amp; Run key running the loader.</p></div>
+      <div class="card"><div class="top-row"><h3>sancadmin &middot; svc_backup &middot; t.harris &middot; d.williams</h3><span class="badge critical">ACCOUNTS</span></div><p class="desc">Compromised identities; t.harris password reset to &lsquo;Summer2025&rsquo;.</p></div>
+      <div class="card"><div class="top-row"><h3>krbtgt (Golden Ticket)</h3><span class="badge critical">DOMAIN KEY</span></div><p class="desc">Forged Kerberos TGT &mdash; authority over every account in greenfield.local.</p></div>
+      <div class="card"><div class="top-row"><h3>GF-BKP01 &middot; GF-WEB01</h3><span class="badge high">PROBED</span></div><p class="desc">Out-of-scope hosts discovered via the attacker&rsquo;s port sweep.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="mitre" style="padding-top:0;">
+  <div class="wrap">
+    <div class="eyebrow" style="color:var(--red);"><span class="dot"></span> MITRE_ATTCK</div>
+    <h2 class="head">Full Technique Mapping<span class="cur">_</span></h2>
+    <div class="grid cols-2">
+      <div class="card"><div class="top-row"><h3>Command &amp; Scripting: PowerShell</h3><span class="tag mono">T1059.001</span></div><p class="desc">Execution &middot; via weaponised AI tool</p></div>
+      <div class="card"><div class="top-row"><h3>Process Injection</h3><span class="tag mono">T1055</span></div><p class="desc">Execution / Defense Evasion</p></div>
+      <div class="card"><div class="top-row"><h3>Impair Defenses: Disable Tools</h3><span class="tag mono">T1562.001</span></div><p class="desc">Defense Evasion &middot; AMSI &amp; Defender tamper</p></div>
+      <div class="card"><div class="top-row"><h3>Scheduled Task / Job</h3><span class="tag mono">T1053.005</span></div><p class="desc">Persistence</p></div>
+      <div class="card"><div class="top-row"><h3>Boot/Logon Autostart: Run Key</h3><span class="tag mono">T1547.001</span></div><p class="desc">Persistence</p></div>
+      <div class="card"><div class="top-row"><h3>Create/Modify System Process: Service</h3><span class="tag mono">T1543.003</span></div><p class="desc">Persistence &middot; GFUpdaterSvc hijack</p></div>
+      <div class="card"><div class="top-row"><h3>OS Credential Dumping: LSA/SAM/NTDS</h3><span class="tag mono">T1003</span></div><p class="desc">Credential Access</p></div>
+      <div class="card"><div class="top-row"><h3>Valid Accounts</h3><span class="tag mono">T1078</span></div><p class="desc">Lateral Movement &middot; svc_backup / t.harris</p></div>
+      <div class="card"><div class="top-row"><h3>Remote Services: SMB / WMI</h3><span class="tag mono">T1021.002</span></div><p class="desc">Lateral Movement &middot; Impacket</p></div>
+      <div class="card"><div class="top-row"><h3>Steal or Forge Kerberos: Golden Ticket</h3><span class="tag mono">T1558.001</span></div><p class="desc">Persistence / Privilege &middot; krbtgt</p></div>
+      <div class="card"><div class="top-row"><h3>Exfiltration to Cloud Storage</h3><span class="tag mono">T1567.002</span></div><p class="desc">Exfiltration &middot; Azure Blob</p></div>
+    </div>
+    <p style="text-align:center; margin-top:16px;"><span class="tag">11 techniques &middot; Initial Access &rarr; Exfiltration</span></p>
+  </div>
+</section>
+
+<section id="downloads" style="padding-top:0;">
+  <div class="wrap">
+    <div class="eyebrow" style="color:var(--green);"><span class="dot" style="background:var(--green); box-shadow:0 0 8px var(--green);"></span> FULL_REPORTS</div>
+    <h2 class="head">Read, Present, Reuse<span class="cur">_</span></h2>
+    <div class="dl-grid">
+      <a class="dl-btn" href="hidden-directive/incident-report.pdf" target="_blank" rel="noopener"><span class="dl-k">PDF</span><span class="dl-t">Incident Report</span><span class="dl-s">Executive reconstruction, credentials, IOCs, remediation.</span></a>
+      <a class="dl-btn" href="hidden-directive/walkthrough.pdf" target="_blank" rel="noopener"><span class="dl-k">PDF</span><span class="dl-t">Analyst Walkthrough</span><span class="dl-s">All 13 stages with approach, strategy &amp; the KQL for each.</span></a>
+      <a class="dl-btn" href="hidden-directive/kql-cheatsheet.pdf" target="_blank" rel="noopener"><span class="dl-k">PDF</span><span class="dl-t">KQL Cheat Sheet</span><span class="dl-s">Every hunting query, grouped by kill-chain stage.</span></a>
+      <a class="dl-btn" href="hidden-directive/deck.pptx" target="_blank" rel="noopener"><span class="dl-k">PPTX</span><span class="dl-t">Animated Deck</span><span class="dl-s">16-slide dark-themed deck, self-advancing.</span></a>
+    </div>
+    <p style="font-size:12px;color:var(--muted-2);margin-top:14px;">Teaching &amp; community release. Queries are teaching-grade &mdash; verify field names against your own schema before reuse.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="foot-brand">SAKHO_SEC</div>
+        <div class="foot-tagline">FIND<span class="r">EVIL</span>.BUILD<span class="r">SYSTEMS</span>.<span class="cur">_</span></div>
+        <div class="foot-sub">Offense. Defense. Code.</div>
+      </div>
+      <div class="foot-social">
+        <a href="https://github.com/mrabousakho" title="GitHub" target="_blank" rel="noopener">&#8981;</a>
+        <a href="https://www.linkedin.com/in/asakho/" title="LinkedIn" target="_blank" rel="noopener">in</a>
+        <a href="mailto:aboubacar.sakho@email.com" title="Email">&#9993;</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
